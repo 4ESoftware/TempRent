@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+    database:
+        image: mariadb:10.5
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: microrenting
+            MYSQL_USER: microrentadmin
+            MYSQL_PASSWORD: admin
+        restart: on-failure
+        expose:
+            - 3306
+        ports:
+            - 9010:3306
+
+    memcached:
+        image: memcached:1.5-alpine
+        restart: on-failure
+        expose:
+            - 11211
+
+    temp_rent:
+        build: TempRent
+        volumes:
+            - ./TempRent/service:/var/www/html
+        ports:
+            - 9003:80
+            - 9004:443
+        depends_on:
+            - memcached
+            - database

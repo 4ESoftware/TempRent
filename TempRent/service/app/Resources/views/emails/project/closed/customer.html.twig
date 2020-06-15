@@ -1,0 +1,25 @@
+<p>Hello {{ name }},</p>
+<p>We inform you that your project <strong>{{ project.name }}</strong> has been successfully closed.</p>
+
+<p>All project details are available at:
+    <a href="{{ domain }}{{ path('project_view', {id: project.id}) }}">{{ path('project_view', {id: project.id}) }}</a>
+</p>
+
+<p>The winning offers are:</p>
+<table>
+    <tr>
+        <td>Tag</td>
+        <td>Supplier</td>
+        <td>Link</td>
+    </tr>
+    {% for winner in project.winners %}
+    <tr>
+        <td>{{ winner.tag.keyword.value }}</td>
+        <td>{{ winner.supplier }}</td>
+        <td><a href="{{ domain }}{{ path('project_view_bid', { project: project.id, tag: winner.tag.id, bid: winner.id }) }}">{{ domain }}{{ path('project_view_bid', { project: project.id, tag: winner.tag.id, bid: winner.id }) }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p>Thank you,</p>
+<p>TempRent Team</p>

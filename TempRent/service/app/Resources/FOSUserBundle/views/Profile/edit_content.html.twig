@@ -1,0 +1,14 @@
+{{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
+{{ form_widget(form) }}
+<div>
+    <input class="btn btn-primary btn-block" type="submit" value="Save"/>
+</div>
+{{ form_end(form) }}
+
+<div style="margin-top: 20px;">
+    <a href="{{ path('fos_user_change_password') }}" class="btn btn-warning btn-block">Reset Password</a>
+</div>
+
+<script>
+    $('#password-strength-meter').hide();
+</script>

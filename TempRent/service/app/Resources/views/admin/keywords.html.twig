@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Application Keywords:</h2> <a href="{{ path('sync_keywords') }}" id="sync"><i class="fa fa-refresh"></i>
+    Synchronize with chatbot</a>
+
+    <div class="table-responsive-md">
+        <table class="table table-borderless table-condensed table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Value</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for keyword in keywords %}
+                <tr>
+                    <td>{{ keyword.id }}</td>
+                    <td>{{ keyword.value }}</td>
+                    <td>{{ keyword.description }}</td>
+                    <td>{% if keyword.status == 1 %}ACTIVE{% else %}INACTIVE{% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}

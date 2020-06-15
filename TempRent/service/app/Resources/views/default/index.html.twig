@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if is_granted('ROLE_CUSTOMER') %}
+        <div class="alert alert-success">
+            Try our chatbot to add a new project! <a href="{{ path('project_add') }}" class="btn btn-success">Let's
+                talk!</a>
+        </div>
+    {% endif %}
+
+    {% if tags|length > 0 %}
+        <select id="tag-selector" class="form-control" multiple="multiple">
+            {% for tag in tags %}
+                <option value="{{ tag.id }}">{{ tag.value }}</option>
+            {% endfor %}
+        </select>
+    {% endif %}
+
+    <div id="projects"></div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function makeProjectTags(tags) {
+            tagString = '';
+            for (var i = 0; i < tags.length; i++) {
+                tagString += '<div class="badge badge-info" style="font-size: 1.1em; padding: 5px 10px; margin-right: 5px;">' + tags[i].keyword.value + '</div>';
+            }
+
+            return tagString;
+        }
+
+        function checkOwnership(project, userid) {
+            if (project.creator.id == userid) {
+                return '<div class="pull-right"><a href="/project/' + project.id + '/view" class="btn btn-success">View Details!</a></div>';
+            }
+
+            return '';
+        }
+
+        function renderProjects(projects) {
+            $('#projects').empty();
+
+            projects.forEach(function (project) {
+                var projectCard = $('<div class="card" style="width: 100%; margin-top: 10px; margin-bottom: 10px;"><div class="card-body"><h5 class="card-title">' + project.name + '</h5>' +
+                            '<h6 class="card-subtitle mb-2 text-muted">posted by: <a href="/user/' + project.creator.id + '">' + project.creator.name + '</a></h6>' +
+                            '<div style="margin-top: 10px; margin-bottom: 10px;">' +
+                            makeProjectTags(project.tags) +
+                            '</div></div>' +
+                            '<div class="card-footer text-muted">' +
+                            '<div class="pull-left project-stats" style="line-height: 35px;">' +
+                            '<span class="badge badge-primary" style="margin-left: 5px;">%Completion: ' + project.stats.completion + '%</span>' +
+                            '<span class="badge badge-primary" style="margin-left: 5px;">Total Bidders: ' + project.stats.bidders + '</span>' +
+                            '<span class="badge badge-primary" style="margin-left: 5px;">Files Uploaded: ' + project.stats.files + '</span>' +
+                            '</div>' +
+                            {% if is_granted('ROLE_SUPPLIER') %}
+                                '<div class="pull-right"><a href="/project/' + project.id + '/details" class="btn btn-success">Bid!</a></div>' +
+                            {% endif %}
+                            {% if is_granted('ROLE_CUSTOMER') %}
+                                checkOwnership(project, {{ user.id }}) +
+                            {% endif %}
+                            '</div>' +
+                            '</div>');
+
+                $('#projects').append(projectCard);
+            });
+        }
+
+        function updateProjects(selection) {
+            $.ajax({
+                url: "/dashboard/filter",
+                method: "POST",
+                data: {selection: selection},
+                dataType: "json"
+            }).done(function (jsonData) {
+                renderProjects(jsonData.projects);
+            });
+        }
+
+        var update = function (e) {
+            var selection = $('#tag-selector').select2('data').map(function (item) { return item.id });
+
+            updateProjects(selection);
+        };
+
+        updateProjects([]);
+
+        $('#tag-selector').select2();
+
+        $('#tag-selector')
+            .on('select2:select', update)
+            .on('select2:unselect', update)
+        ;
+    </script>
+{% endblock %}

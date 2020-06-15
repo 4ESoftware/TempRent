@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h3>Bidding for <strong>{{ project.name }}</strong></h3><div class="badge badge-success">{{ tag.keyword.value }}</div>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input type="submit" class="btn btn-success" value="Send bid!"/>
+    {{ form_end(form) }}
+{% endblock %}

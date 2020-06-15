@@ -1,0 +1,18 @@
+<p>Hello {{ name }},</p>
+<p>Project <strong>{{ bid.tag.project.name }}</strong> has been successfully closed.</p>
+
+{% set intro = 'We are happy to announce that' %}
+{% if bid.status == 3 %}
+    {% set intro = 'We regretfully inform that' %}
+{% endif %}
+
+<p>{{ intro }} your bid on <strong>{{ bid.tag.keyword.value }}</strong> has been <strong>{{ bid.statusAsString }}!</strong></p>
+
+{% if bid.status == 2 %}
+<p>You can view all details (including a <strong>draft contract ready for download</strong>) here: <a
+            href="{{ domain }}{{ path('project_view_bid', {project: project.id, tag: bid.tag.id, bid: bid.id}) }}">{{ domain }}{{ path('project_view_bid', {project: project.id, tag: bid.tag.id, bid: bid.id}) }}</a>
+</p>
+{% endif %}
+
+<p>Thank you,</p>
+<p>TempRent Team</p>

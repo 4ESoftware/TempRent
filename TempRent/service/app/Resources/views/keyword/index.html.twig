@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Keywords list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Value</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for keyword in keywords %}
+            <tr>
+                <td><a href="{{ path('admin_keyword_show', { 'id': keyword.id }) }}">{{ keyword.id }}</a></td>
+                <td>{{ keyword.value }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_keyword_show', { 'id': keyword.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_keyword_edit', { 'id': keyword.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_keyword_new') }}">Create a new keyword</a>
+        </li>
+    </ul>
+{% endblock %}

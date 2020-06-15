@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-md-12">
+        <div class="profile-sidebar">
+            <div class="profile-usertitle">
+                <div class="profile-usertitle-name">
+                    {{ user.fullName }} ({{ user.username }})
+                </div>
+                <div class="profile-usertitle-job">
+                    {% if user.type == 1 %}Supplier{% elseif user.type == 2 %}Customer{% else %}Public{% endif %}
+                </div>
+                <div>
+                    <p>{{ user.email }}</p>
+                </div>
+            </div>
+            <div class="user-company mt-5 ml-5 mr-5">
+                {% if user.company == null %}
+                    <div class="alert alert-primary" role="alert">
+                        No company data provided.
+                    </div>
+                {% else %}
+                    <div>
+                        <p><strong>Company Details</strong></p>
+                        <p><strong>{{ user.company.name }}</strong></p>
+                        <p><i class="fa fa-home"></i> {{ user.company.address }}
+                        <p><i class="fa fa-phone"></i> {{ user.company.phone }}</p>
+                        <div class="alert alert-light">
+                            <p>Identificaion No: {{ user.company.cui }}</p>
+                            <p>Bank: {{ user.company.bank }}</p>
+                            <p>Iban: {{ user.company.iban|anoniban }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if user.type == 1 %}
+                <div class="user-company mt-5 ml-5 mr-5">
+                    {% if user.keywords|length == 0 %}
+                        <div class="alert alert-primary" role="alert">
+                            This supplier hasn't selected any <strong>keywords</strong>.
+                        </div>
+                    {% else %}
+                        <div>
+                            <p><strong>Supplier Keywords</strong></p>
+                            {% for keyword in user.keywords %}
+                                <span class="badge {% if keyword.status == 1 %}badge-info{% else %}badge-danger{% endif %}">{{ keyword.value }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        /* Profile container */
+        .profile {
+            margin: 20px 0;
+        }
+
+        /* Profile sidebar */
+        .profile-sidebar {
+            padding: 20px 0 10px 0;
+            background: #eee;
+        }
+
+        .profile-usertitle {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .profile-usertitle-name {
+            color: #5a7391;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .profile-usertitle-job {
+            text-transform: uppercase;
+            color: #5b9bd1;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .profile-userbuttons {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .profile-userbuttons .btn {
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 15px;
+            margin-right: 5px;
+        }
+
+        .profile-userbuttons .btn:last-child {
+            margin-right: 0px;
+        }
+
+        .profile-usermenu {
+            margin-top: 30px;
+        }
+
+        .profile-usermenu ul li {
+            border-bottom: 1px solid #f0f4f7;
+        }
+
+        .profile-usermenu ul li:last-child {
+            border-bottom: none;
+        }
+
+        .profile-usermenu ul li a {
+            color: #93a3b5;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .profile-usermenu ul li a i {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .profile-usermenu ul li a:hover {
+            background-color: #fafcfd;
+            color: #5b9bd1;
+        }
+
+        .profile-usermenu ul li.active {
+            border-bottom: none;
+        }
+
+        .profile-usermenu ul li.active a {
+            color: #5b9bd1;
+            background-color: #f6f9fb;
+            border-left: 2px solid #5b9bd1;
+            margin-left: -2px;
+        }
+
+        /* Profile Content */
+        .profile-content {
+            padding: 20px;
+            background: #fff;
+            min-height: 460px;
+        }
+    </style>
+{% endblock %}
