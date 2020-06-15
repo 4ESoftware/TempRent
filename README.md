@@ -4,6 +4,28 @@ _this repository is based on the reseach grant nr 22/16.06.2017 within Priority 
 
 # Install
 
-## Crearea containerelor
-
+Trebuie construite containerele:
 `$ docker-compose build`
+
+Apoi se pornesc:
+`$ docker-compose up -d`
+
+Apoi ne logam pe containerul de backend:
+`$ docker exec -it temprent_temp_rent_1 bash`
+
+Ne asiguram ca sunt instalate toate bibliotecile de care depindem:
+`$ composer install`
+> Atentie, in procesul de instalare trebuie sa setam niste parametri.
+
+Cream baza de date si schema
+`$ php bin/console doctrine:schema:create`
+
+Cream utilizatorul de administrare:
+`$ php bin/console fos:user:create`
+
+Si il promovam ca super-administrator:
+`php bin/console fos:user:promote`
+
+> Please choose a username:admin
+> Please choose a role:ROLE_SUPER_ADMIN
+
