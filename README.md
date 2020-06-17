@@ -29,3 +29,10 @@ Si il promovam ca super-administrator:
 > Please choose a username:admin
 > Please choose a role:ROLE_SUPER_ADMIN
 
+# Comenzi utile
+
+### Vreau controlul unui container
+`docker exec -it webapp_temp_rent_1 bash`
+
+### Vreau sa vad statusul containerelor
+`docker-compose ps`
