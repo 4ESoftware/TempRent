@@ -109,7 +109,7 @@ class DefaultController extends Controller
      */
     public function viewPrivacyAction()
     {
-        return $this->render('default/privacy.html.twig', []);
+        return $this->render('privacy.html.twig', []);
     }
 
     /**
