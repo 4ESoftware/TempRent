@@ -51,3 +51,46 @@ Pentru a rula aplicatia, se va rula:
 Aceasta comanda va porni serverul aplicatiei si il va expune pe portul 9004.
 
 > ATENTIE! aplicatia nu va rula in production mode in acest fel. Chiar daca este perfect functionala, nu este recomandata rularea cu aceasta metoda in productie.
+
+**!Pentru a rula in productie!!**
+1. se defineste un virtual host nou in apache2 folosind urmatoarea configurare:
+```xml
+<VirtualHost *:80>
+    DocumentRoot /home/lummetry/webapp/service/web
+    <Directory /home/lummetry/webapp/service/web>
+        Require all granted
+        AllowOverride All
+        Allow from All
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^(.*)$ app.php [QSA,L]
+    </Directory>
+    ErrorLog /var/log/apache2/project_error.log
+    CustomLog /var/log/apache2/project_access.log combined
+</VirtualHost>
+
+<VirtualHost *:443>
+    DocumentRoot /home/lummetry/webapp/service/web
+    <Directory /home/lummetry/webapp/service/web>
+        Require all granted
+        AllowOverride All
+        Allow from All
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^(.*)$ app.php [QSA,L]
+    </Directory>
+    ErrorLog /var/log/apache2/project_error.log
+    CustomLog /var/log/apache2/project_access.log combined
+
+</VirtualHost>
+```
+
+Se editeaza calea din configurare cu calea unde a fost clonata aplicatia, apoi se salveaza, de exemplu sub denumirea de *temprent.conf* in `/etc/apache2/sites-available/`.
+
+Apoi:
+1. se dezactiveaza site-ul incarcat default:
+`sudo a2dissite 000-default.conf`
+2. se activreaza noul site *temprent.conf*
+`sudo a2ensite temprent.conf`
+3. se reporneste apache2
+`sudo service apache2 restart`
