@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% set project = bid.tag.project %}
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title"><a href="{{ path('project_details', {id: project.id}) }}">{{ project.name }}</a></h5>
+            <h6 class="card-subtitle mb-2 text-muted">posted by: <a
+                        href="{{ path('view_user_profile', {id: project.creator.id}) }}">{{ project.creator.fullName }}</a>
+            </h6>
+            <div style="margin-top: 10px; margin-bottom: 10px;">
+                {% for tag in project.tags %}
+                    <div class="badge badge-info"
+                         style="font-size: 1.1em; padding: 5px 10px;">
+                        {{ tag.keyword.value }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            <div class="pull-left project-stats" style="line-height: 35px;">
+                <span class="badge badge-primary"
+                      style="margin-left: 5px;">%Completion: {{ project.stats.completion }}%</span>
+                <span class="badge badge-primary"
+                      style="margin-left: 5px;">Total Bidders: {{ project.stats.bidders }}</span>
+                <span class="badge badge-primary"
+                      style="margin-left: 5px;">Files Uploaded: {{ project.stats.files }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-3" style="width: 100%;">
+        <div class="card-header">
+            <h5 class="card-title">
+                <strong>{{ bid.tag.keyword.value }}</strong>
+                <div class="pull-right">
+                    <a class="btn btn-success" href="#" id="save-bid"><i class="fa fa-check"></i> Save</a>
+                </div>
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ bid.createdAt|date('d/m/Y') }}</h6>
+        </div>
+        <div class="card-body">
+            {{ form_start(form, {'attr': {'id': 'form_bid_edit'}}) }}
+                {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+        <div class="card-footer text-muted">
+            <h5>
+                Attachments:
+                <a href="#">Add files</a>
+            </h5>
+            <table class="table table-responsive table-borderless">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">File</th>
+                    <th scope="col">Creator</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for file in bid.files %}
+                    <tr>
+                        <td>{{ file.uploadedAt|date("d/m") }}</td>
+                        <td><a href="#">{{ file.filename }}</a><br></td>
+                        <td>{{ file.creator.fullName }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $('#save-bid').on('click', function () {
+            $('#form_bid_edit').submit();
+        });
+    </script>
+{% endblock %}
