@@ -33,18 +33,21 @@ class LoginListener
 
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
+        $ip = $_SERVER['REMOTE_ADDR'];
+
         /** @var User $user */
         $user = $event->getAuthenticationToken()->getUser();
-//        $reader = new Reader(' /GeoIP2-City.mmdb');
-//        $record = $reader->city('128.101.101.101');
+        $reader = new Reader($this->geoIPdir.'/GeoLite2-City.mmdb');
+        $record = $reader->city($ip);
 
         $auditEntry = (new Audit())
-            ->setCity($this->geoIPdir)
+            ->setCity($record->city->name)
+            ->setCountry($record->country->name)
             ->setType(Audit::LOGIN_EVENT)
             ->setContent(sprintf('User %s logged in at %s', $user->getUsername(), (new \DateTime())->format(DATE_ATOM)))
             ->setUser($user)
             ->setLogTime(new \DateTime())
-            ->setIP($_SERVER['REMOTE_ADDR'])
+            ->setIP($ip)
             ;
 
         $user->addAuditLog($auditEntry);

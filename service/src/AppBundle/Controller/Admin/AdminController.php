@@ -154,7 +154,9 @@ class AdminController extends Controller
                 'user' => $a->getUser()->getUsername(),
                 'time' => $a->getLogTime()->format(DATE_ATOM),
                 'content' => $a->getContent(),
-                'IP' => $a->getIP()
+                'IP' => $a->getIP(),
+                'country' => $a->getCountry(),
+                'city' => $a->getCity(),
             ];
         }, $log->toArray()));
     }

@@ -143,6 +143,8 @@
                 <tr>
                     <th scope="col">Username</th>
                     <th scope="col">IP</th>
+                    <th scope="col">City</th>
+                    <th scope="col">Country</th>
                     <th scope="col">Timestamp</th>
                     <th scope="col">Content</th>
                 </tr>
@@ -159,6 +161,8 @@
                     var newRow = $('<tr>' +
                         '<td>' + logEntry.user + '</td>' +
                         '<td>' + logEntry.IP + '</td>' +
+                        '<td>' + logEntry.city + '</td>' +
+                        '<td>' + logEntry.country + '</td>' +
                         '<td>' + logEntry.time + '</td>' +
                         '<td>' + logEntry.content + '</td>' +
                         '</tr>');
