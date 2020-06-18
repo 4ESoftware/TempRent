@@ -61,10 +61,11 @@ COPY ./service /var/www/html
 RUN chown www-data:www-data /var/www/html/
 RUN sudo a2dissite 000-default.conf
 RUN sudo a2ensite backend.conf
+RUN sudo service apache2 start
 
 WORKDIR /var/www/html
 
 RUN sudo chown -R www-data:www-data ./
 
 EXPOSE 80
-EXPOSE 443
+EXPOSE 8000
