@@ -61,6 +61,20 @@ class Audit
     private $IP = null;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="city", type="string", nullable=true)
+     */
+    private $city;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="country", type="string", nullable=true)
+     */
+    private $country;
+
+    /**
      * Get id.
      *
      * @return int
@@ -140,6 +154,42 @@ class Audit
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string|null $city
+     * @return Audit
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param string|null $country
+     * @return Audit
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+        return $this;
     }
 
     /**

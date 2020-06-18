@@ -22,6 +22,7 @@ parameters:
     chatbot_api_port: ~
 
     bid_files_directory: '%kernel.project_dir%/web/uploads/bids'
+    geoip_database_directory: '%kernel.project_dir%/var/geoip'
     facebook_app_id: 594639071483249
     facebook_app_secret: 2893011fdb0e4449f1338bc7cc382414
 
