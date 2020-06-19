@@ -1,2 +1,6 @@
 
 .spyproject/config/
+
+temprent_reporting_data/_output/
+
+temprent_reporting_data/_logs/
