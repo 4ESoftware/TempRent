@@ -1,0 +1,10 @@
+{
+  "BASE_FOLDER" : ".",
+  "APP_FOLDER" : "temprent_reporting_data",
+  
+  "SERVER"  : "127.0.0.1",
+  "PORT"    : "3306",
+  "USER"    : "root",
+  "PASS"    : "test1234",
+  "DB"      : "microrenting"
+}
