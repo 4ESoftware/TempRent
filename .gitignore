@@ -6,3 +6,9 @@ service/var/
 temprent_reporting_data/_output/
 
 temprent_reporting_data/_logs/
+
+.DS_Store
+
+model_server/__pycache__/
+
+chatbot_v2/core/__pycache__/
