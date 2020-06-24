@@ -367,7 +367,7 @@ class Inference(LummetryObject):
     preds = preds[sorted_idx]
     
     if preds[0] < self.thr_valid_user_label:
-      return 'None'
+      return ''
     
     user_label = self.dct_idx2label[sorted_idx[0]]
     
@@ -414,7 +414,10 @@ class Inference(LummetryObject):
     user_label = self._infer_user_label(last_user_replica)
     expected_labels = self._get_expected_labels(last_bot_replica_bucket)
     
-    dct_ret = {NEXT_UTTERANCE: "", USER_LABEL: user_label}
+    dct_ret = {NEXT_UTTERANCE: "", USER_LABEL: ""}
+    if user_label in self.hashtags:
+      dct_ret[USER_LABEL] = user_label
+    
     crt_tip_imobil = self._get_tip_imobil(conversation_id)
 
     if self._is_imobil(user_label) and crt_tip_imobil is None:
@@ -424,6 +427,7 @@ class Inference(LummetryObject):
     
     if user_label not in expected_labels:
       dct_ret[NEXT_UTTERANCE] = 'Te rog reformuleaza raspunsul la ultima intrebare.'
+      dct_ret[USER_LABEL] = ''
       return dct_ret
     #endif
     
