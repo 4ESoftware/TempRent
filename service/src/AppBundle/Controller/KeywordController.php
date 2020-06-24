@@ -54,8 +54,6 @@ class KeywordController extends Controller
 
         $text = $request->request->get('text');
         if ($text !== '') {
-//            $keywords = $em->getRepository('AppBundle:Keyword')->findByLikeKeyword($text);
-
             $keywords = $em->getRepository('AppBundle:Keyword')->createQueryBuilder('k')
                 ->where('k.value LIKE :text')
                 ->setParameter('text', '%' . $text . '%')
@@ -69,7 +67,12 @@ class KeywordController extends Controller
         $userKeywords = $user->getKeywords();
         $render = [];
 
+        /** @var Keyword $keyword */
         foreach ($keywords as $keyword) {
+            if ($keyword->getStatus() === Keyword::INACTIVE) {
+                continue;
+            }
+
             $temp = [
                 'keyword' => [
                     'id' => $keyword->getId(),

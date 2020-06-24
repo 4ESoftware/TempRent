@@ -15,19 +15,19 @@
 
     <ul id="keyword-list" class="mt-4">
         {% for keyword in keywords %}
-            <li>
-                {% if keyword.keyword.status == 0 %}
-                    (Not avaliable anymore)
-                {% endif %}
-
+            {% if keyword.keyword.status != 0 %}
+                <li>
                 {% if keyword.selected == true %}
                     <strong>{{ keyword.keyword.value }}</strong> | <a
-                        href="{{ path('remove_keyword', { id: keyword.keyword.id }) }}"><i class="fa fa-minus-sign"></i>
+                        href="{{ path('remove_keyword', { id: keyword.keyword.id }) }}"><i
+                            class="fa fa-minus-sign"></i>
                     Remove</a>
                 {% else %}
-                    {{ keyword.keyword.value }} | <a href="{{ path('add_keyword', { id: keyword.keyword.id }) }}"><i class="fa fa-plus-sign"></i> Add</a>
+                    {{ keyword.keyword.value }} | <a href="{{ path('add_keyword', { id: keyword.keyword.id }) }}"><i
+                            class="fa fa-plus-sign"></i> Add</a>
                 {% endif %}
-            </li>
+                </li>
+            {% endif %}
         {% endfor %}
     </ul>
 {% endblock %}
@@ -42,9 +42,9 @@
 
             keywords.forEach(function (keyword) {
                 if (keyword.selected) {
-                    var item = $('<li><strong>' + keyword.keyword.value + '</strong> | <a href="/profile/keywords/remove/'+keyword.keyword.id+'"><i class="fa fa-minus-sign"></i> Remove</a></li>');
+                    var item = $('<li><strong>' + keyword.keyword.value + '</strong> | <a href="/profile/keywords/remove/' + keyword.keyword.id + '"><i class="fa fa-minus-sign"></i> Remove</a></li>');
                 } else {
-                    var item = $('<li>' + keyword.keyword.value + ' | <a href="/profile/keywords/add/'+keyword.keyword.id+'"><i class="fa fa-plus-sign"></i> Add</a></li>');
+                    var item = $('<li>' + keyword.keyword.value + ' | <a href="/profile/keywords/add/' + keyword.keyword.id + '"><i class="fa fa-plus-sign"></i> Add</a></li>');
                 }
 
                 $('#keyword-list').append(item);
