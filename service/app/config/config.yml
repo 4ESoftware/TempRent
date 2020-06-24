@@ -124,3 +124,4 @@ hwi_oauth:
             authorization_url:   "https://www.facebook.com/v7.0/dialog/oauth"
             access_token_url:    "https://graph.facebook.com/v7.0/oauth/access_token"
             revoke_token_url:    "https://graph.facebook.com/v7.0/me/permissions"
+            scope:               "email,public_profile"
