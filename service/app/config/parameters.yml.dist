@@ -25,4 +25,5 @@ parameters:
     geoip_database_directory: '%kernel.project_dir%/var/geoip'
     facebook_app_id: 594639071483249
     facebook_app_secret: 2893011fdb0e4449f1338bc7cc382414
-
+    google_client_id: 1046905775373-078mr95pit9kr06gqfotj8hr417qvk1t.apps.googleusercontent.com
+    google_client_secret: EiCjAha0289JH2ngoorhBsqF

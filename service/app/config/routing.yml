@@ -22,6 +22,10 @@ facebook_login:
     path: /login/check-facebook
     schemes: [https]
 
+google_login:
+    path: /login/check-google
+    schemes: [https]
+
 app:
     resource: '@AppBundle/Controller/'
     type: annotation

@@ -114,7 +114,7 @@ hwi_oauth:
         username_iterations: 30
         properties:
             facebook: facebook_id
-#            google: google_id
+            google: google_id
     resource_owners:
         facebook:
             type:                facebook
@@ -125,3 +125,8 @@ hwi_oauth:
             access_token_url:    "https://graph.facebook.com/v7.0/oauth/access_token"
             revoke_token_url:    "https://graph.facebook.com/v7.0/me/permissions"
             scope:               "email,public_profile"
+        google:
+            type:                google
+            client_id:           "%google_client_id%"
+            client_secret:       "%google_client_secret%"
+            scope:               "email profile"
