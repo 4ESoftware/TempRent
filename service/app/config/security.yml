@@ -22,6 +22,7 @@ security:
                 failure_handler: app.login.failure
                 login_path: /login
                 check_path: /login_check
+                success_handler: AppBundle\Security\Authentication\Handler\AuthenticationSuccessHandler
             logout:       true
             anonymous:    true
             oauth:
