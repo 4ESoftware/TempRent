@@ -47,7 +47,16 @@
             font-weight: bold;
         }
 
-
+        .body-background-image {
+            background-image: url("/background.png");
+            background-color: #FFFFFF;
+            background-position: right;
+            overflow-y: hidden;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100vh;
+            position: relative;
+        }
     </style>
 
     {% block stylesheets %}{% endblock %}
@@ -64,7 +73,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
 </head>
-<body>
+<body class="body-background-image">
 
 {% if app.request.hasPreviousSession %}
     {% for type, messages in app.session.flashbag.all() %}
