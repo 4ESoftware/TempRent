@@ -120,7 +120,7 @@ hwi_oauth:
             type:                facebook
             client_id:           "%facebook_app_id%"
             client_secret:       "%facebook_app_secret%"
-            infos_url:           "https://graph.facebook.com/v7.0/me?fields=id,name,email"
+            infos_url:           "https://graph.facebook.com/v7.0/me?fields=name,email"
             authorization_url:   "https://www.facebook.com/v7.0/dialog/oauth"
             access_token_url:    "https://graph.facebook.com/v7.0/oauth/access_token"
             revoke_token_url:    "https://graph.facebook.com/v7.0/me/permissions"
