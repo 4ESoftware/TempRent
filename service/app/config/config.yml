@@ -106,18 +106,6 @@ monolog:
             # log error-level messages and higher
             level: error
 
-#hwi_oauth:
-#    # list of names of the firewalls in which this bundle is active, this setting MUST be set
-#    firewall_names: [main]
-#    resource_owners:
-#        any_name:
-#            type: facebook
-#            client_id: 594639071483249
-#            client_secret: 2893011fdb0e4449f1338bc7cc382414
-#            options:
-#                display: popup #dialog is optimized for popup window
-#                auth_type: rerequest # Re-asking for Declined Permissions
-
 hwi_oauth:
     connect:
         account_connector: my_user_provider
@@ -125,7 +113,6 @@ hwi_oauth:
     fosub:
         username_iterations: 30
         properties:
-            # these properties will be used/redefined later in the custom FOSUBUserProvider service.
             facebook: facebook_id
 #            google: google_id
     resource_owners:
@@ -133,3 +120,7 @@ hwi_oauth:
             type:                facebook
             client_id:           "%facebook_app_id%"
             client_secret:       "%facebook_app_secret%"
+            infos_url:           "https://graph.facebook.com/v7.0/me?fields=id,name,email"
+            authorization_url:   "https://www.facebook.com/v7.0/dialog/oauth"
+            access_token_url:    "https://graph.facebook.com/v7.0/oauth/access_token"
+            revoke_token_url:    "https://graph.facebook.com/v7.0/me/permissions"
