@@ -1,0 +1,17 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: 3306
+    database_name: microrenting
+    database_user: microrentingadmin
+    database_password: mrAdm1n
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: no-reply@lummetry.ai
+    mailer_password: null
+    secret: o3k46ij7fsd8a98e5645n73jkxdxrzx65id896aew6a9ew
+    chatbot_api_url: 52.166.91.9
+    chatbot_api_port: 5001
+    bid_files_directory: '%kernel.project_dir%/web/uploads/bids'
+    facebook_app_id: 59463907148324
+    facebook_app_secret: 2893011fdb0e4449f1338bc7cc382414
