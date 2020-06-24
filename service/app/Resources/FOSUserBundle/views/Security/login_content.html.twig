@@ -1,4 +1,8 @@
 <div class="login-form">
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
     <form action="{{ path("fos_user_security_check") }}" method="post">
         {% if csrf_token %}
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
@@ -22,6 +26,14 @@
         </div>
     </form>
     <p class="text-center"><a href="{{ path('fos_user_registration_register') }}">Create an Account</a></p>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}">
+                Facebook Login (this is a test!!!)
+            </a>
+        </div>
+    </div>
 </div>
 
 
@@ -31,16 +43,6 @@
 {#        src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0&appId=594639071483249"#}
 {#        nonce="IvfWaIcs"></script>#}
 
-{#{% if error %}#}
-{#    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
-{#{% endif %}#}
-{#<div class="row">#}
-{#    <div class="col-12 text-center">#}
-{#        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}">#}
-{#            Facebook#}
-{#        </a>#}
-{#    </div>#}
-{#</div>#}
 
 {#<div class="row">#}
 {#    <div class="col-12 text-center">#}
