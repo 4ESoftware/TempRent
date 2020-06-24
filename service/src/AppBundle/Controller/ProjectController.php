@@ -115,7 +115,7 @@ class ProjectController extends Controller
             $project->setStatus(Project::PROJECT_WORKFLOW_STEP_2);
         } else {
             $cl = (new ConversationLine())
-                ->setContent($robotSaid->getLabel())
+                ->setContent($robotSaid->getReply())
                 ->setSpokenAt(new \DateTime())
                 ->setWhom(ConversationLine::ROBOT)
                 ->setProject($project);

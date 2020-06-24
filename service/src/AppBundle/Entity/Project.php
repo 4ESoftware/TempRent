@@ -304,6 +304,14 @@ class Project
 
     public function getStats()
     {
+        if ($this->getStatus() < self::PROJECT_WORKFLOW_STEP_3) {
+            return [
+                'bidders' => 'Not Available',
+                'completion' => 'Not Available',
+                'files' => 'Not Available'
+            ];
+        }
+
         $bidders = array_reduce(
             $this->getTags()->toArray(),
             function (int $bidders, Tag $tag) {
