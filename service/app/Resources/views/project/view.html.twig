@@ -30,60 +30,65 @@
                 {% endif %}
 
                 {% if project.status == 7 %}
-                    <h4><div class="badge badge-light">Closed</div></h4>
+                    <h4>
+                        <div class="badge badge-light">Closed</div>
+                    </h4>
                 {% endif %}
             </div>
         </div>
     </div>
-
-    <div class="table-responsive-md">
-        {% for tag in project.tags %}
-            <table class="table table-borderless table-condensed table-striped"
-                   style="margin-top: 30px; border-bottom: 1px solid #888;">
-                <tbody>
-                <tr style="border-bottom: 1px solid #888;">
-                    <td colspan="5">
-                        <h6><strong>{{ tag.keyword.value }}</strong></h6>
-                        <p class="text-muted small mb-0">Bids: {{ tag.stats.bidders }} |
-                            Files: {{ tag.stats.files }}</p>
-                    </td>
-                </tr>
-                <tr style="font-weight: bold;">
-                    <td style="width: 15%;">Date</td>
-                    <td style="width: 25%">Supplier</td>
-                    <td>Notes</td>
-                    <td style="width: 15%;">Price</td>
-                    <td style="width: 15%;"></td>
-                </tr>
-                {% for bid in tag.bids %}
-                    <tr>
-                        <td>{{ bid.createdAt|date('d/m') }}</td>
-                        <td>
-                            <a href="{{ path('view_user_profile', { id: bid.supplier.id }) }}">{{ bid.supplier.fullName }}</a>
-                        </td>
-                        <td>{{ bid.note }}</td>
-                        <td>{{ bid.price }}</td>
-                        <td>
-                            <a href="{{ path('project_view_bid', {project: project.id, tag: tag.id, bid: bid.id}) }}">view
-                                bid</a>
-                            {% if bid.status == 1 %}
-                                <span class="badge badge-info">PENDING</span>
-                            {% elseif bid.status == 2 %}
-                                <span class="badge badge-success">ACCEPTED</span>
-                            {% else %}
-                                <span class="badge badge-danger">REJECTED</span>
-                            {% endif %}
-                        </td>
-                    </tr>
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            <div class="table-responsive-md">
+                {% for tag in project.tags %}
+                    <table class="table table-borderless table-condensed table-striped"
+                           style="margin-top: 30px; border-bottom: 1px solid #888;">
+                        <tbody>
+                        <tr style="border-bottom: 1px solid #888;">
+                            <td colspan="5">
+                                <h6><strong>{{ tag.keyword.value }}</strong></h6>
+                                <p class="text-muted small mb-0">Bids: {{ tag.stats.bidders }} |
+                                    Files: {{ tag.stats.files }}</p>
+                            </td>
+                        </tr>
+                        <tr style="font-weight: bold;">
+                            <td style="width: 15%;">Date</td>
+                            <td style="width: 25%">Supplier</td>
+                            <td>Notes</td>
+                            <td style="width: 15%;">Price</td>
+                            <td style="width: 15%;"></td>
+                        </tr>
+                        {% for bid in tag.bids %}
+                            <tr>
+                                <td>{{ bid.createdAt|date('d/m') }}</td>
+                                <td>
+                                    <a href="{{ path('view_user_profile', { id: bid.supplier.id }) }}">{{ bid.supplier.fullName }}</a>
+                                </td>
+                                <td>{{ bid.note }}</td>
+                                <td>{{ bid.price }}</td>
+                                <td>
+                                    <a href="{{ path('project_view_bid', {project: project.id, tag: tag.id, bid: bid.id}) }}">view
+                                        bid</a>
+                                    {% if bid.status == 1 %}
+                                        <span class="badge badge-info">PENDING</span>
+                                    {% elseif bid.status == 2 %}
+                                        <span class="badge badge-success">ACCEPTED</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">REJECTED</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        {% if tag.stats.bidders == 0 %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No bids registered for this tag.</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
                 {% endfor %}
-                {% if tag.stats.bidders == 0 %}
-                    <tr>
-                        <td colspan="5" class="text-center text-muted">No bids registered for this tag.</td>
-                    </tr>
-                {% endif %}
-                </tbody>
-            </table>
-        {% endfor %}
+            </div>
+        </div>
     </div>
 
 {% endblock %}
