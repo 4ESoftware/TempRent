@@ -37,10 +37,10 @@
             </div>
         </div>
     </div>
-    <div class="card" style="width: 100%;">
-        <div class="card-body">
-            <div class="table-responsive-md">
-                {% for tag in project.tags %}
+    {% for tag in project.tags %}
+        <div class="card" style="width: 100%; margin-top: 25px;">
+            <div class="card-body">
+                <div class="table-responsive-md">
                     <table class="table table-borderless table-condensed table-striped"
                            style="margin-top: 30px; border-bottom: 1px solid #888;">
                         <tbody>
@@ -86,9 +86,10 @@
                         {% endif %}
                         </tbody>
                     </table>
-                {% endfor %}
+                </div>
             </div>
         </div>
-    </div>
+    {% endfor %}
+
 
 {% endblock %}

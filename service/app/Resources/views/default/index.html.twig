@@ -7,14 +7,21 @@
                 talk!</a>
         </div>
     {% endif %}
-
-    {% if tags|length > 0 %}
-        <select id="tag-selector" class="form-control" multiple="multiple">
-            {% for tag in tags %}
-                <option value="{{ tag.id }}">{{ tag.value }}</option>
-            {% endfor %}
-        </select>
-    {% endif %}
+    <div class="card" style="width: 100%; margin-top: 25px; margin-bottom: 25px;">
+        <div class="card-body">
+            <h5 class="card-title">Filter by keyword here.</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Keep in mind that this filter searches for <strong>any</strong> of the selected keywords. Leave it empty for all that apply.</h6>
+            <div class="col-12">
+                {% if tags|length > 0 %}
+                    <select id="tag-selector" class="form-control" multiple="multiple">
+                        {% for tag in tags %}
+                            <option value="{{ tag.id }}">{{ tag.value }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
     <div id="projects"></div>
 {% endblock %}
@@ -46,24 +53,24 @@
 
             projects.forEach(function (project) {
                 var projectCard = $('<div class="card" style="width: 100%; margin-top: 10px; margin-bottom: 10px;"><div class="card-body"><h5 class="card-title">' + project.name + '</h5>' +
-                            '<h6 class="card-subtitle mb-2 text-muted">posted by: <a href="/user/' + project.creator.id + '">' + project.creator.name + '</a></h6>' +
-                            '<div style="margin-top: 10px; margin-bottom: 10px;">' +
-                            makeProjectTags(project.tags) +
-                            '</div></div>' +
-                            '<div class="card-footer text-muted">' +
-                            '<div class="pull-left project-stats" style="line-height: 35px;">' +
-                            '<span class="badge badge-primary" style="margin-left: 5px;">%Completion: ' + project.stats.completion + '%</span>' +
-                            '<span class="badge badge-primary" style="margin-left: 5px;">Total Bidders: ' + project.stats.bidders + '</span>' +
-                            '<span class="badge badge-primary" style="margin-left: 5px;">Files Uploaded: ' + project.stats.files + '</span>' +
-                            '</div>' +
-                            {% if is_granted('ROLE_SUPPLIER') %}
-                                '<div class="pull-right"><a href="/project/' + project.id + '/details" class="btn btn-success">Bid!</a></div>' +
-                            {% endif %}
-                            {% if is_granted('ROLE_CUSTOMER') %}
-                                checkOwnership(project, {{ user.id }}) +
-                            {% endif %}
-                            '</div>' +
-                            '</div>');
+                    '<h6 class="card-subtitle mb-2 text-muted">posted by: <a href="/user/' + project.creator.id + '">' + project.creator.name + '</a></h6>' +
+                    '<div style="margin-top: 10px; margin-bottom: 10px;">' +
+                    makeProjectTags(project.tags) +
+                    '</div></div>' +
+                    '<div class="card-footer text-muted">' +
+                    '<div class="pull-left project-stats" style="line-height: 35px;">' +
+                    '<span class="badge badge-primary" style="margin-left: 5px;">%Completion: ' + project.stats.completion + '%</span>' +
+                    '<span class="badge badge-primary" style="margin-left: 5px;">Total Bidders: ' + project.stats.bidders + '</span>' +
+                    '<span class="badge badge-primary" style="margin-left: 5px;">Files Uploaded: ' + project.stats.files + '</span>' +
+                    '</div>' +
+                        {% if is_granted('ROLE_SUPPLIER') %}
+                    '<div class="pull-right"><a href="/project/' + project.id + '/details" class="btn btn-success">Bid!</a></div>' +
+                        {% endif %}
+                        {% if is_granted('ROLE_CUSTOMER') %}
+                    checkOwnership(project, {{ user.id }}) +
+                        {% endif %}
+                    '</div>' +
+                    '</div>');
 
                 $('#projects').append(projectCard);
             });
@@ -81,7 +88,9 @@
         }
 
         var update = function (e) {
-            var selection = $('#tag-selector').select2('data').map(function (item) { return item.id });
+            var selection = $('#tag-selector').select2('data').map(function (item) {
+                return item.id
+            });
 
             updateProjects(selection);
         };

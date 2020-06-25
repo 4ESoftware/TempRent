@@ -21,102 +21,112 @@
         </div>
     </div>
 
-    <h2>Application users:</h2>
+    <div class="card" style="width: 100%; margin-top: 25px;">
+        <div class="card-body">
+            <h5 class="card-title">Registered users</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Navigate through tabs to view details.</h6>
 
-    <ul class="nav nav-tabs" id="usersTab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="public-tab" data-toggle="tab" href="#public" role="tab"
-               aria-controls="public" aria-selected="true">Public</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="supplier-tab" data-toggle="tab" href="#supplier" role="tab" aria-controls="supplier"
-               aria-selected="false">Suppliers</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="customer-tab" data-toggle="tab" href="#customer" role="tab" aria-controls="customer"
-               aria-selected="false">Customers</a>
-        </li>
-    </ul>
-    <div class="tab-content" id="usersTabContent">
-        <div class="tab-pane fade show active" id="public" role="tabpanel" aria-labelledby="public-tab">
-            <div class="table-responsive-md">
+            <ul class="nav nav-tabs" id="usersTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="public-tab" data-toggle="tab" href="#public" role="tab"
+                       aria-controls="public" aria-selected="true">Public</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="supplier-tab" data-toggle="tab" href="#supplier" role="tab"
+                       aria-controls="supplier"
+                       aria-selected="false">Suppliers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="customer-tab" data-toggle="tab" href="#customer" role="tab"
+                       aria-controls="customer"
+                       aria-selected="false">Customers</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="usersTabContent">
+                <div class="tab-pane fade show active" id="public" role="tabpanel" aria-labelledby="public-tab">
+                    <div class="table-responsive-md">
 
-                <table class="table table-borderless table-condensed table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Full Name</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">e-mail Address</th>
-                        <th scope="col">view log</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for user in public %}
-                        <tr>
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.fullName }}</td>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
-                            <td><a href="#" class="view-log" id="{{ user.id }}"><i class="fa fa-eye"></i> view</a></td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="supplier" role="tabpanel" aria-labelledby="supplier-tab">
-            <div class="table-responsive-md">
+                        <table class="table table-borderless table-condensed table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Full Name</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">e-mail Address</th>
+                                <th scope="col">view log</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in public %}
+                                <tr>
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.fullName }}</td>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td><a href="#" class="view-log" id="{{ user.id }}"><i class="fa fa-eye"></i>
+                                            view</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="supplier" role="tabpanel" aria-labelledby="supplier-tab">
+                    <div class="table-responsive-md">
 
-                <table class="table table-borderless table-condensed table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Full Name</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">e-mail Address</th>
-                        <th scope="col">view log</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for user in suppliers %}
-                        <tr>
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.fullName }}</td>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
-                            <td><a href="#" class="view-log" id="{{ user.id }}"><i class="fa fa-eye"></i> view</a></td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="customer" role="tabpanel" aria-labelledby="customer-tab">
-            <div class="table-responsive-md">
+                        <table class="table table-borderless table-condensed table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Full Name</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">e-mail Address</th>
+                                <th scope="col">view log</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in suppliers %}
+                                <tr>
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.fullName }}</td>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td><a href="#" class="view-log" id="{{ user.id }}"><i class="fa fa-eye"></i>
+                                            view</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="customer" role="tabpanel" aria-labelledby="customer-tab">
+                    <div class="table-responsive-md">
 
-                <table class="table table-borderless table-condensed table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Full Name</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">e-mail Address</th>
-                        <th scope="col">view log</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for user in customers %}
-                        <tr>
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.fullName }}</td>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
-                            <td><a href="#" class="view-log" id="{{ user.id }}"><i class="fa fa-eye"></i> view</a></td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        <table class="table table-borderless table-condensed table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Full Name</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">e-mail Address</th>
+                                <th scope="col">view log</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in customers %}
+                                <tr>
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.fullName }}</td>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td><a href="#" class="view-log" id="{{ user.id }}"><i class="fa fa-eye"></i>
+                                            view</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

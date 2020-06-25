@@ -334,21 +334,24 @@ class Project
             0
         );
 
-        $completion = round(
-            array_reduce(
-                array_map(
-                    function (Tag $tag) {
-                        return $tag->getBids()->count() ? 1 : 0;
+        $completion = 'not available';
+        if ($this->getTags()->count() ) {
+            $completion = round(
+                array_reduce(
+                    array_map(
+                        function (Tag $tag) {
+                            return $tag->getBids()->count() ? 1 : 0;
+                        },
+                        $this->getTags()->toArray()
+                    ),
+                    function (int $total, int $hasBids) {
+                        return $total += $hasBids;
                     },
-                    $this->getTags()->toArray()
-                ),
-                function (int $total, int $hasBids) {
-                    return $total += $hasBids;
-                },
-                0
-            ) * 100 / $this->getTags()->count(),
-            2
-        );
+                    0
+                ) * 100 / $this->getTags()->count(),
+                2
+            );
+        }
 
         return [
             'bidders' => $bidders,
