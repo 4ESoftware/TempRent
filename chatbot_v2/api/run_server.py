@@ -308,6 +308,11 @@ class Inference(LummetryObject):
     dct_conversation_layers = bot.dct_conversation_layers_spatii
     conversation_layers = bot.conversation_layers_spatii
     
+    if tip_imobil in bot.no_nr_camere:
+      dct_conversation_layers = bot.dct_conversation_layers_no_nr_camere
+      conversation_layers = bot.conversation_layers_no_nr_camere
+    #endif
+    
     _tmp_conversation_layers = [[] for _ in range(1+max(dct_conversation_layers.values()))]
     
     for bucket_name in prev_bucket_names:
@@ -320,7 +325,7 @@ class Inference(LummetryObject):
       layer = conversation_layers[i]
       
       if set(tmp_layer) < set(layer):
-        return random.choice(list(set(layer ) - set(tmp_layer)))
+        return random.choice(list(set(layer) - set(tmp_layer)))
     #endfor
     
     return
