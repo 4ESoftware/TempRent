@@ -58,6 +58,7 @@ swiftmailer:
     host:                 '%mailer_host%'
     port:                 '%mailer_port%'
     logging:              true
+    delivery_addresses:   ['temprent@lummetry.ai']
 
 sensio_framework_extra:
     router:

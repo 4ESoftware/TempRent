@@ -45,7 +45,7 @@ class EmailEventsSubscriber implements EventSubscriberInterface
         $project = $event->getProject();
 
         $message = (new \Swift_Message('Project: ' . $project->getName() . ' is closed.'))
-            ->setFrom('no-reply@temprent.4e.ro')
+            ->setFrom('temprent@lummetry.ai')
             ->setTo($project->getCreator()->getEmail())
             ->setBody(
                 $this->templating->render(
@@ -63,7 +63,7 @@ class EmailEventsSubscriber implements EventSubscriberInterface
         foreach ($project->getTags() as $tag) {
             foreach ($tag->getBids() as $bid) {
                 $message = (new \Swift_Message('Project: ' . $project->getName() . ' is closed.'))
-                    ->setFrom('no-reply@temprent.4e.ro')
+                    ->setFrom('temprent@lummetry.ai')
                     ->setTo($bid->getSupplier()->getEmail())
                     ->setBody(
                         $this->templating->render(
