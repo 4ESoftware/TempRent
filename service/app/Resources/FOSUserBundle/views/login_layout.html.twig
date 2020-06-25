@@ -244,7 +244,9 @@
 
 </head>
 <body class="body-background-image">
-
+<div style="width: 100%; text-align: center;">
+    <img src="ue-desktop.jpg" style="width: 45%;">
+</div>
 {% if app.request.hasPreviousSession %}
     {% for type, messages in app.session.flashbag.all() %}
         {% for message in messages %}
