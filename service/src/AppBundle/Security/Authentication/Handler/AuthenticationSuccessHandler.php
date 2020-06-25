@@ -19,6 +19,6 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-        return new RedirectResponse($this->router->generate('fos_user_profile_show'));
+        return new RedirectResponse($this->router->generate('dashboard'));
     }
 }
