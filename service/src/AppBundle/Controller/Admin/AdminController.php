@@ -18,11 +18,26 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends Controller
 {
+    /** @var array $reportsConfig */
+    private $reportsConfig = [];
+
+    /** @var string|null $reportingAPIurl */
+    private $reportingAPIurl = null;
+
+    public function __construct(array $reportsConfig, string $reportingAPIurl)
+    {
+        $this->reportsConfig = $reportsConfig;
+        $this->reportingAPIurl = $reportingAPIurl;
+    }
+
     /**
      * @Route("/admin/keywords", name="admin_view_keywords")
      */
     public function hashtagsAction(Request $request)
     {
+        dump($this->reportsConfig);
+        dump($this->reportingAPIurl);
+
         $em = $this->getDoctrine()->getManager();
         $keywords = $em->getRepository(Keyword::class)->findAll();
 

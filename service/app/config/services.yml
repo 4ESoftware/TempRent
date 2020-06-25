@@ -25,6 +25,11 @@ services:
         arguments:
             $targetDirectory: '%bid_files_directory%'
 
+    AppBundle\Controller\Admin\AdminController:
+        arguments:
+            - '%reports%'
+            - '%reports_endpoint%'
+
     app.form.registration:
         class: AppBundle\Form\RegistrationType
         tags:
