@@ -63,13 +63,21 @@ doctrine:
         auto_mapping: true
 
 # Swiftmailer Configuration
+#swiftmailer:
+#    transport: '%mailer_transport%'
+#    host: '%mailer_host%'
+#    username: '%mailer_user%'
+#    password: '%mailer_password%'
+#    disable_delivery: false
+#    #spool: { type: memory }
+
 swiftmailer:
-    transport: '%mailer_transport%'
-    host: '%mailer_host%'
-    username: '%mailer_user%'
-    password: '%mailer_password%'
-    spool: { type: memory }
-    disable_delivery: false
+    transport:            '%mailer_transport%'
+    username:             '%mailer_user%'
+    password:             '%mailer_password%'
+    host:                 '%mailer_host%'
+    port:                 '%mailer_port%'
+    logging:              true
 
 sensio_framework_extra:
     router:
@@ -80,8 +88,8 @@ fos_user:
     firewall_name: main
     user_class: AppBundle\Entity\User
     from_email:
-        address: "%mailer_user%"
-        sender_name: "%mailer_user%"
+        address: "no-reply@lummetry.ai"
+        sender_name: "Lummetry No-Reply"
     registration:
         form:
             type: AppBundle\Form\RegistrationType
