@@ -85,9 +85,17 @@ class EmailEventsSubscriber implements EventSubscriberInterface
 
     public function onBidRejected(BidRejected $event)
     {
+        // nothing at the moment, please insert here logic for sending emails when bids are rejected.
+        // place the templates in service/app/Resources/views/emails folder
+        // naming convention (you can ignore it, ofc):
+        // service/app/Resources/views/emails/<entity>/<eventname>/<template_name>.html.twig
     }
 
     public function onBidAccepted(BidAccepted $event)
     {
+        // nothing at the moment, please insert here logic for sending emails when bids are accepted.
+        // place the templates in service/app/Resources/views/emails folder
+        // naming convention (you can ignore it, ofc):
+        // service/app/Resources/views/emails/<entity>/<eventname>/<template_name>.html.twig
     }
 }

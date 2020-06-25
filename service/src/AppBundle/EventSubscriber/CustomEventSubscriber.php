@@ -6,6 +6,7 @@ use AppBundle\Entity\Audit;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\UserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -54,41 +55,26 @@ class CustomEventSubscriber implements EventSubscriberInterface
     {
         return [
             FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationCompleted',
+            FOSUserEvents::SECURITY_IMPLICIT_LOGIN => 'onImplicitLogin',
             KernelEvents::REQUEST => 'onRequestValidateLoginFails',
-            SecurityEvents::INTERACTIVE_LOGIN => 'onSecurityInteractiveLogin'
+            SecurityEvents::INTERACTIVE_LOGIN => 'onSecurityInteractiveLogin',
         ];
+    }
+
+    public function onImplicitLogin(UserEvent $event)
+    {
+        /** @var User $user */
+        $user = $event->getUser();
+
+        return $this->logAuditLogin($user);
     }
 
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
-        $ip = $_SERVER['REMOTE_ADDR'];
-
         /** @var User $user */
         $user = $event->getAuthenticationToken()->getUser();
-        $reader = new Reader($this->geoIPdir.'/GeoLite2-City.mmdb');
-        $record = $reader->city($ip);
 
-        $auditEntry = (new Audit())
-            ->setCity($record->city->name)
-            ->setCountry($record->country->name)
-            ->setType(Audit::LOGIN_EVENT)
-            ->setContent(sprintf('User %s loggedin at %s', $user->getUsername(), (new \DateTime())->format(DATE_ATOM)))
-            ->setUser($user)
-            ->setLogTime(new \DateTime())
-            ->setIP($ip)
-        ;
-
-        $user->addAuditLog($auditEntry);
-
-        $this->entityManager->persist($auditEntry);
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-
-        $session = $this->requestStack->getCurrentRequest()->getSession();
-        $session->remove('LAST_FAILED_AUTHENTICATION_TIMESTAMP');
-        $session->remove('FAILED_AUTHENTICATION_COUNT');
-
-        return;
+        return $this->logAuditLogin($user);
     }
 
     public function onRegistrationCompleted(FormEvent $event)
@@ -115,5 +101,35 @@ class CustomEventSubscriber implements EventSubscriberInterface
         }
 
         return;
+    }
+
+    private function logAuditLogin(User $user)
+    {
+        $ip = $_SERVER['REMOTE_ADDR'];
+
+        $reader = new Reader($this->geoIPdir.'/GeoLite2-City.mmdb');
+        $record = $reader->city($ip);
+
+        $auditEntry = (new Audit())
+            ->setCity($record->city->name)
+            ->setCountry($record->country->name)
+            ->setType(Audit::LOGIN_EVENT)
+            ->setContent(sprintf('User %s loggedin at %s', $user->getUsername(), (new \DateTime())->format(DATE_ATOM)))
+            ->setUser($user)
+            ->setLogTime(new \DateTime())
+            ->setIP($ip)
+        ;
+
+        $user->addAuditLog($auditEntry);
+
+        $this->entityManager->persist($auditEntry);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $session->remove('LAST_FAILED_AUTHENTICATION_TIMESTAMP');
+        $session->remove('FAILED_AUTHENTICATION_COUNT');
+
+        return ;
     }
 }
