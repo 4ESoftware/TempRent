@@ -62,6 +62,11 @@
     </div>
 
     {% set project = bid.tag.project %}
+    <div class="row">
+        <div class="col-12 mb-3">
+            <a href="{{ path('project_details', {id: project.id}) }}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back to project</a>
+        </div>
+    </div>
     <div class="card" style="width: 100%;">
         <div class="card-body">
             <h5 class="card-title"><a href="{{ path('project_details', {id: project.id}) }}">{{ project.name }}</a></h5>

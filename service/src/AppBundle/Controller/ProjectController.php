@@ -79,6 +79,49 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/project/{id}/reset", name="reset_conversation")
+     */
+    public function resetProjectConversationAction(Project $project)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($project->getConversation() as $conversationLine) {
+            $em->remove($conversationLine);
+        }
+
+        foreach ($project->getTags() as $tag) {
+            $em->remove($tag);
+        }
+
+        $project->setConversationId(null)
+            ->setDraftLabels(null);
+
+        $em->persist($project);
+        $em->flush();
+
+        $openingLine = $this->chatbot->startConversation();
+
+        $cl = (new ConversationLine())
+            ->setContent($openingLine['intro'])
+            ->setSpokenAt(new \DateTime())
+            ->setWhom(ConversationLine::ROBOT)
+            ->setProject($project);
+
+        $project
+            ->setDraftLabels(null)
+            ->addConversationLine($cl)
+            ->setConversationId($openingLine['id'])
+            ->setStatus(Project::PROJECT_WORKFLOW_STEP_1)
+        ;
+
+        $em->persist($cl);
+        $em->persist($project);
+        $em->flush();
+
+        return $this->redirectToRoute('project_conversation', array('id' => $project->getId()));
+    }
+
+    /**
      * @Route("/project/{id}/conversation", name="project_conversation")
      */
     public function projectChatAction(Request $request, Project $project, UserInterface $user)

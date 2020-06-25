@@ -9,13 +9,13 @@
             <h6 class="card-subtitle mb-2 text-muted">posted by: <a href="{{ path('view_user_profile', {id: project.creator.id}) }}">{{ project.creator.fullName }}</a></h6>
             <div style="margin-top: 10px; margin-bottom: 10px;">
                 {% for tag in project.tags %}
-                    <div class="badge badge-info" style="font-size: 1.1em; padding: 5px 10px;">{{ tag.keyword.value }}</div>
+                    <div class="badge badge-info" style="font-size: 1.1em; padding: 5px 10px; margin-bottom: 5px;">{{ tag.keyword.value }}</div>
                 {% endfor %}
             </div>
         </div>
         <div class="card-footer text-muted">
             <div class="pull-right">
-                <a href="#" class="btn btn-link">Let me explain it again!</a>
+                <a href="{{ path('reset_conversation', {id: project.id}) }}" class="btn btn-link">Let me explain it again!</a>
                 <a href="{{ path('project_publish', {id: project.id}) }}" class="btn btn-success">Post it!</a>
             </div>
         </div>
