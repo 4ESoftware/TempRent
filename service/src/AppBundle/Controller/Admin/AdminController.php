@@ -18,16 +18,48 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends Controller
 {
+    /** @var array $reportsConfig */
+    private $reportsConfig = [];
+
+    /** @var string|null $reportingAPIurl */
+    private $reportingAPIurl = null;
+
+    /** @var array $reports */
+    private $reports = [];
+
+    public function __construct(array $reportsConfig, string $reportingAPIurl)
+    {
+        $this->reportsConfig = $reportsConfig;
+        $this->reportingAPIurl = $reportingAPIurl;
+
+        $reportList = [];
+        foreach ($this->reportsConfig as $name => $uri) {
+            $reportList[] = [
+                'name' => $name,
+                'uri' => $uri,
+            ];
+        }
+
+        $this->reports = [
+            'endpoint' => $this->reportingAPIurl,
+            'list' => $reportList,
+        ];
+    }
+
     /**
      * @Route("/admin/keywords", name="admin_view_keywords")
      */
     public function hashtagsAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $keywords = $em->getRepository(Keyword::class)->findAll();
+        $keywords = $em->getRepository(Keyword::class)->findBy([], [
+            'status' => 'DESC',
+            'value' => 'ASC'
+        ]);
 
         return $this->render('admin/keywords.html.twig', [
             'keywords' => $keywords,
+            'reports' => $this->reports,
         ]);
     }
 
@@ -41,6 +73,7 @@ class AdminController extends Controller
 
         return $this->render('admin/projects.html.twig', [
             'projects' => $projects,
+            'reports' => $this->reports,
         ]);
     }
 
@@ -138,7 +171,8 @@ class AdminController extends Controller
         return $this->render('admin/users.html.twig', [
             'public' => $public,
             'suppliers' => $suppliers,
-            'customers' => $customers
+            'customers' => $customers,
+            'reports' => $this->reports,
         ]);
     }
 

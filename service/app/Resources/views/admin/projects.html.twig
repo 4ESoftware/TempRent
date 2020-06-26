@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h2>Projects:</h2>
-
     <div id="project-modal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -17,40 +15,69 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" id="send-to-retrain" style="display: none;" class="btn btn-success">Send to AI to retrain</a>
+                    <a href="#" id="send-to-retrain" style="display: none;" class="btn btn-success">Send to AI to
+                        retrain</a>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="table-responsive-md">
-        <table class="table table-borderless table-condensed table-striped">
-            <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">Name</th>
-                <th scope="col">Tags</th>
-                <th scope="col">Status</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for project in projects %}
-                <tr>
-                    <td><a href="#" class="view-conversation" id="{{ project.id }}">view <i class="fa fa-comments-o"></i></a></td>
-                    <td>{{ project.name }}</td>
-                    <td>
-                        {% for tag in project.tags %}
-                            <div class="badge badge-info">{{ tag.keyword.value }}</div>
-                        {% endfor %}
-                    </td>
-                    <td>{{ project.getStatusAsString }}</td>
-                    <td><a href="#" class="view-involved" id="{{ project.id }}">view <i class="fa fa-users"></i></a></td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div id="reports-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="report-modal-title">Title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="report-iframe" src="#" style="width: 100%; min-height: 450px; border: 0;"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="width: 100%; margin-top: 25px;">
+        <div class="card-body">
+            <h5 class="card-title">Application projects</h5>
+            <h6 class="card-subtitle mb-2 text-muted">This is the master list :) .</h6>
+
+            <div class="table-responsive-md">
+                <table class="table table-borderless table-condensed table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Tags</th>
+                        <th scope="col">Status</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for project in projects %}
+                        <tr>
+                            <td><a href="#" class="view-conversation" id="{{ project.id }}">view <i
+                                            class="fa fa-comments-o"></i></a></td>
+                            <td>{{ project.name }}</td>
+                            <td>
+                                {% for tag in project.tags %}
+                                    <div class="badge badge-info">{{ tag.keyword.value }}</div>
+                                {% endfor %}
+                            </td>
+                            <td>{{ project.getStatusAsString }}</td>
+                            <td><a href="#" class="view-involved" id="{{ project.id }}">view <i class="fa fa-users"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -80,7 +107,7 @@
 
                     if (tag.bidders.length > 0) {
                         var newRow = $('<tr>' +
-                            '<td rowspan="'+ tag.bidders.length + '"><strong>' + tag.name + '</strong></td>' +
+                            '<td rowspan="' + tag.bidders.length + '"><strong>' + tag.name + '</strong></td>' +
                             '<td>' + tag.bidders[0].supplier + ' (' + tag.bidders[0].company + ')</td>' +
                             '<td>' + tag.bidders[0].status + '</td>' +
                             '</tr>');
@@ -95,7 +122,7 @@
                         }
 
                     } else {
-                        var newRow = $('<tr><td><strong>'+tag.name+'</strong></td><td colspan="2" class="text-muted">No bidders registered</td></tr>');
+                        var newRow = $('<tr><td><strong>' + tag.name + '</strong></td><td colspan="2" class="text-muted">No bidders registered</td></tr>');
                         tbody.append(newRow);
                     }
 
@@ -139,5 +166,26 @@
 
             $('#project-modal').modal('show');
         });
+
+        $('.report-link').on('click', function (e) {
+            e.preventDefault();
+
+            $('#report-iframe').attr('src', $(this).attr('href'));
+            $('#reports-modal').modal('show');
+        });
     </script>
+{% endblock %}
+
+{% block reports %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Reports
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for report in reports.list %}
+                <a class="dropdown-item report-link" href="{{ reports.endpoint }}{{ report.uri }}">{{ report.name }}</a>
+            {% endfor %}
+        </div>
+    </li>
 {% endblock %}

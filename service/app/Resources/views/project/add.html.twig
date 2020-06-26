@@ -1,8 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input type="submit" class="btn btn-success btn-block" value="Start chat!"/>
-    {{ form_end(form) }}
+    <div class="card" style="width: 100%; margin-top: 25px;">
+        <div class="card-body">
+            <h5 class="card-title">Give your project a name.</h5>
+            <h6 class="card-subtitle mb-2 text-muted">This will help our suppliers while browsing on the front page.</h6>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input type="submit" class="btn btn-success btn-block" value="Start chat!"/>
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

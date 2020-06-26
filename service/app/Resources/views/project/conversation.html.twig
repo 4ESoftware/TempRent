@@ -1,66 +1,77 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="messaging">
-        <div class="inbox_msg">
+        <div class="card" style="width: 100%; margin-top: 25px;">
+        <div class="card-body">
+            <h5 class="card-title">{{ project.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Now our awesome bot will ask you a few questions</h6>
+            <div class="messaging">
+                <div class="inbox_msg">
+                    <div class="mesgs">
+                        <div class="msg_history" id="msg_history">
 
-            <div class="mesgs">
-                <div class="msg_history" id="msg_history">
-
-                    {% for line in project.conversation %}
-                        {% if line.whom == 0 %}
-                            <div class="incoming_msg">
-                                <div class="incoming_msg_img">
-                                    <img src="https://cdn3.vectorstock.com/i/1000x1000/39/17/cute-robot-icon-vector-21513917.jpg"
-                                         alt="robot">
-                                </div>
-                                <div class="received_msg">
-                                    <div class="received_withd_msg">
-                                        <p> {{ line.content }}
-                                            <span class="time_date">{{ line.spokenAt | date("H:i") }}</span>
-                                        </p>
+                            {% for line in project.conversation %}
+                                {% if line.whom == 0 %}
+                                    <div class="incoming_msg">
+                                        <div class="incoming_msg_img">
+                                            <img src="https://temprent.4e.ro/robot-head.png"
+                                                 alt="robot">
+                                        </div>
+                                        <div class="received_msg">
+                                            <div class="received_withd_msg">
+                                                <p> {{ line.content }}
+                                                    <span class="time_date">{{ line.spokenAt | date("H:i") }}</span>
+                                                </p>
+                                                <span class="pull-left text-muted" style="font-size: .8em;">Our Chatbot</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        {% else %}
-                            <div class="outgoing_msg">
-                                <div class="sent_msg">
-                                    <p>
-                                        {{ line.content }}
-                                        <span class="time_date">{{ line.spokenAt | date("H:i") }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                                {% else %}
+                                    <div class="outgoing_msg">
+                                        <div class="sent_msg">
+                                            <p>
+                                                {{ line.content }}
+                                                <span class="time_date">{{ line.spokenAt | date("H:i") }}</span>
+                                            </p>
+                                            <span class="pull-right text-muted" style="font-size: .8em;">{{ app.user.fullName }}</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
 
-                    {% if project.status > 1 %}
-                        <div class="end_of_conversation" style="
+                            {% if project.status > 1 %}
+                                <div class="end_of_conversation" style="
                                 width: 100%;
                                 text-align: center;
                                 margin-top: 20px;
                                 margin-bottom: 20px;
                             ">
-                            <div class="badge badge-light" style="
+                                    <div class="badge badge-light" style="
                                 color: #999;
                                 padding: 6px 20px;
                             ">This conversation has ended! Please validate the results <a href="{{ path('project_validate', {id: project.id}) }}">here</a>!</div>
-                        </div>
-                    {% endif %}
+                                </div>
+                            {% endif %}
 
-                </div>
-                <div class="type_msg" id="message_textbox">
-                    {% if project.status == 1 %}
-                    <div class="input_msg_write">
-                        <input type="text" class="write_msg" id="message" placeholder="Type a message"/>
-                        <button class="msg_send_btn" id="msg_send_btn" type="button"><i class="fa fa-paper-plane"
-                                                                                        aria-hidden="true"></i></button>
+                        </div>
+                        <div class="type_msg" id="message_textbox">
+                            {% if project.status == 1 %}
+                                <div class="input_msg_write">
+                                    <input type="text" class="write_msg" id="message" placeholder="Type a message"/>
+                                    <button class="msg_send_btn" id="msg_send_btn" type="button"><i class="fa fa-paper-plane"
+                                                                                                    aria-hidden="true"></i></button>
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
-                    {% endif %}
                 </div>
             </div>
+            </div>
         </div>
-    </div>
+
+
+
+
 {% endblock %}
 
 {% block javascripts %}
@@ -88,7 +99,7 @@
         }
 
         function makeHumanBubble(text) {
-            var bubble = $('<div class="outgoing_msg"><div class="sent_msg"><p>' + text + '<span class="time_date">' + formatTime() + '</span></p></div></div>');
+            var bubble = $('<div class="outgoing_msg"><div class="sent_msg"><p>' + text + '<span class="time_date">' + formatTime() + '</span></p><span class="pull-right text-muted" style="font-size: .8em;">{{ app.user.fullName }}</span></div></div>');
             $('#msg_history').append(bubble);
 
             updateScroll();
@@ -97,12 +108,12 @@
         function makeRobotBubble(text) {
             var bubble = $('<div class="incoming_msg">\n' +
                 '                        <div class="incoming_msg_img"><img\n' +
-                '                                    src="https://cdn3.vectorstock.com/i/1000x1000/39/17/cute-robot-icon-vector-21513917.jpg"\n' +
+                '                                    src="https://temprent.4e.ro/robot-head.png"\n' +
                 '                                    alt="robot"></div>\n' +
                 '                        <div class="received_msg">\n' +
                 '                            <div class="received_withd_msg">\n' +
                 '                                <p>' + text +
-                '                                <span class="time_date">' + formatTime() + '</span></p></div>\n' +
+                '                                <span class="time_date">' + formatTime() + '</span></p><span class="pull-left text-muted" style="font-size: .8em;">Our Chatbot</span></div>\n' +
                 '                        </div>\n' +
                 '                    </div>');
 
@@ -167,10 +178,7 @@
 
 {% block stylesheets %}
     <style>
-        /*---------chat window---------------*/
-
         .inbox_msg {
-            border: 1px solid #ddd;
             clear: both;
             overflow: hidden;
         }
@@ -277,7 +285,7 @@
 
         .received_withd_msg p {
             background: #ebebeb none repeat scroll 0 0;
-            border-radius: 0 15px 15px 15px;
+            border-radius: 15px 15px 15px 0px;
             color: #646464;
             font-size: 14px;
             margin: 0;
@@ -303,7 +311,7 @@
 
         .sent_msg p {
             background: #0465ac;
-            border-radius: 12px 15px 15px 0;
+            border-radius: 15px 15px 0 15px;
             font-size: 14px;
             margin: 0;
             color: #fff;
@@ -351,7 +359,7 @@
         }
 
         .messaging {
-            padding: 0 0 50px 0;
+            padding: 0;
         }
 
         .msg_history {

@@ -19,6 +19,10 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request, UserInterface $user = null)
     {
+        if ($user !== null && $user->getType() === null) {
+            return $this->redirectToRoute('fos_user_profile_show');
+        }
+
         return $this->redirectToRoute('dashboard');
     }
 
@@ -29,6 +33,12 @@ class DefaultController extends Controller
     {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('admin_view_keywords');
+        }
+
+        if ($user !== null &&
+            ($user->getType() === null || ($user->getType() == User::USER_TYPE_SUPPLIER && $user->getKeywords()->count() == 0))
+        ) {
+            return $this->redirectToRoute('fos_user_profile_show');
         }
 
         $tags = $this->getDoctrine()->getManager()->getRepository(Keyword::class)->findBy(['status' => 1]);
@@ -53,13 +63,13 @@ class DefaultController extends Controller
 
         if ($tags == null && $user->getType() == User::USER_TYPE_SUPPLIER) {
             $tags = array_map(function (Keyword $kw) {
-                    return $kw->getId();
-                }, $user->getKeywords()->toArray()
+                return $kw->getId();
+            }, $user->getKeywords()->toArray()
             );
         } elseif ($tags == null) {
             $tags = array_map(function (Keyword $kw) {
-                    return $kw->getId();
-                }, $this->getDoctrine()->getManager()->getRepository(Keyword::class)->findBy(['status' => 1])
+                return $kw->getId();
+            }, $this->getDoctrine()->getManager()->getRepository(Keyword::class)->findBy(['status' => 1])
             );
         }
 
@@ -76,14 +86,14 @@ class DefaultController extends Controller
                     'name' => $project->getCreator()->getFullName(),
                 ],
                 'tags' => array_map(function (Tag $tag) {
-                        return [
-                            'id' => $tag->getId(),
-                            'keyword' => [
-                                'id' => $tag->getKeyword()->getId(),
-                                'value' => $tag->getKeyword()->getValue(),
-                            ],
-                        ];
-                    },
+                    return [
+                        'id' => $tag->getId(),
+                        'keyword' => [
+                            'id' => $tag->getKeyword()->getId(),
+                            'value' => $tag->getKeyword()->getValue(),
+                        ],
+                    ];
+                },
                     $project->getTags()->toArray()
                 ),
                 'stats' => $project->getStats(),
@@ -103,6 +113,30 @@ class DefaultController extends Controller
         ]);
     }
 
+    /**
+     * @Route("/user/config/type/{type}", name="set_user_type")
+     */
+    public function setUserTypeAction(Request $request, UserInterface $user, int $type)
+    {
+        if ($user->getType() === null) {
+            $em = $this->getDoctrine()->getManager();
+            $user->setType($type);
+
+            switch ($type) {
+                case User::USER_TYPE_CUSTOMER:
+                    $user->setRoles(['ROLE_CUSTOMER']);
+                    break;
+                case User::USER_TYPE_SUPPLIER:
+                    $user->setRoles(['ROLE_SUPPLIER']);
+                    break;
+            }
+
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('fos_user_security_logout');
+    }
 
     /**
      * @Route("/privacy", name="view_privacy")
@@ -117,7 +151,7 @@ class DefaultController extends Controller
      */
     public function deleteUserAction(Request $request, User $user, UserInterface $loggedUser)
     {
-        if($loggedUser->getId() != $user->getId()) {
+        if ($loggedUser->getId() != $user->getId()) {
             return $this->redirectToRoute('dashboard');
         }
 

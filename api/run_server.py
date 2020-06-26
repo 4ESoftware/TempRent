@@ -13,6 +13,7 @@ import re
 import os
 
 from chatbot_v2.core import bot_replicas_buckets as bot
+from reporting import RepEngine
 
 JOB = 'JOB'
 INTRO = 'INTRO'
@@ -24,6 +25,12 @@ HASHTAGS = 'HASHTAGS'
 JOB_START_CONVERSATION = 'START_CONVERSATION'
 JOB_INFER_CHATBOT = 'INFER_CHATBOT'
 JOB_GET_HASHTAGS = 'GET_HASHTAGS'
+JOB_GET_AVAIL_REPORTS = 'GET_AVAIL_REPORTS'
+JOB_GET_REPORT = 'GET_REPORT'
+REPORTS = 'REPORTS'
+REPORT_ID = 'REPORT_ID'
+PNG_PATH = 'PNG_PATH'
+
 
 
 # custom_objects: dict with 'custom_name': custom_function
@@ -172,9 +179,11 @@ def corpus_to_batch(sents, tokenizer_func, max_size, dct_word2idx,
 
 class Inference(LummetryObject):
   
-  def __init__(self, model, dct_config_labels, thr_valid_user_label=0.1, **kwargs):
+  def __init__(self, model, dct_config_labels, eng_reporting=None, thr_valid_user_label=0.1, **kwargs):
     super().__init__(**kwargs)
     self.model = model
+    self.eng_reporting = None
+    self.set_reporting_module(eng_reporting)
     self.dct_config_labels = dct_config_labels
     self.dct_label2idx = self.dct_config_labels['ALL_LABELS']
     self.dct_idx2label = {v:k for k,v in self.dct_label2idx.items()}
@@ -189,6 +198,10 @@ class Inference(LummetryObject):
                                           fn_buckets='buckets.json')
     self.constraint_labels = self._get_constraint_labels()
     self._check_buckets()
+    return
+  
+  def set_reporting_module(self, eng_reporting):
+    self.eng_reporting = eng_reporting
     return
   
   def _check_buckets(self):
@@ -258,7 +271,8 @@ class Inference(LummetryObject):
     
   
   def predict(self, dct_params):    
-    possible_jobs = [JOB_START_CONVERSATION, JOB_INFER_CHATBOT, JOB_GET_HASHTAGS]
+    possible_jobs = [JOB_START_CONVERSATION, JOB_INFER_CHATBOT, JOB_GET_HASHTAGS,
+                     JOB_GET_AVAIL_REPORTS, JOB_GET_REPORT]
     
     if JOB not in dct_params:
       raise ValueError('{} key should be specified in the input JSON. Possible values: {}'
@@ -269,8 +283,6 @@ class Inference(LummetryObject):
     if job not in possible_jobs:
       raise ValueError('Value {} for key {} should be one of these: {}'
                        .format(job, JOB, possible_jobs))
-    
-    
     
     if job == JOB_START_CONVERSATION:
       return self._start_conversation()
@@ -288,12 +300,27 @@ class Inference(LummetryObject):
     if job == JOB_GET_HASHTAGS:
       return self._get_hashtags()
     
+    if job == JOB_GET_AVAIL_REPORTS:
+      return self._get_avail_reports()
+    
+    if job == JOB_GET_REPORT:
+      if REPORT_ID not in dct_params:
+        raise ValueError("The input JSON must contain the report id as value for key {}"
+                         .format(REPORT_ID))
+      
+      return self._get_report(report_id=dct_params[REPORT_ID])
+      
     return
+
+  def _get_avail_reports(self):
+    return {REPORTS: self.eng_reporting.get_avail_reports()}
+
+  def _get_report(self, report_id):
+    return {PNG_PATH: self.eng_reporting.get_report(report_id)}
 
   def _get_hashtags(self):
     return {HASHTAGS: self.hashtags}
     
-  
   def _start_conversation(self):
     _conv_id = len(self.conversation_history)
     self.conversation_history[_conv_id] = {'bucket_names': ['hello'],
@@ -479,7 +506,7 @@ def infer(conv, conv_id):
   return dct[NEXT_UTTERANCE]
 
 if __name__ == '__main__':
-  ONLINE = True
+  ONLINE = False
   
   parser = argparse.ArgumentParser()
   parser.add_argument("-H", "--host", help='The host of the server', type=str, default='127.0.0.1')
@@ -559,7 +586,10 @@ if __name__ == '__main__':
                                 cut_left=False,
                                 verbose=False)
   
-  eng = Inference(model=model, dct_config_labels=dct_config_labels, log=log)
+  eng_reporting = RepEngine(log=log)
+  eng = Inference(model=model, dct_config_labels=dct_config_labels,
+                  eng_reporting=eng_reporting,
+                  log=log)
   
   ######## TEST ZONE #########
   if False:

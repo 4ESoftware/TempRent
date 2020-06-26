@@ -3,8 +3,12 @@
 {% block body %}
     <h1>Company creation</h1>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input class="btn btn-primary btn-block" type="submit" value="Create" />
-    {{ form_end(form) }}
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input class="btn btn-success btn-block" type="submit" value="Create"/>
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

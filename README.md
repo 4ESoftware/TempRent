@@ -94,3 +94,50 @@ Apoi:
 `sudo a2ensite temprent.conf`
 3. se reporneste apache2
 `sudo service apache2 restart`
+
+## Instalarea ceritficatului SSL
+
+Urmariti instructiunile de aici: https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
+
+## Dump-ul bazei de date
+
+Se foloseste comanda (atentie ca cere parola, se editeaza numele fisierului dupa nevoie):
+
+`$ mysqldump -umicrorentingadmin -p microrenting > ~/dbdumps/2020-06-25.sql`
+
+## Configurari importante
+
+### Setari legate de e-mail
+
+Pentru a permite trimiterea e-mail-urilor Symfony se foloseste de SwiftMailer, o biblioteca open source care se leaga la SMTP. Configurarea acesteia este facuta prin intermediul fisierului `service/app/config/config.yml`. 
+
+```yml
+swiftmailer:
+    transport:            '%mailer_transport%'
+    username:             '%mailer_user%'
+    password:             '%mailer_password%'
+    host:                 '%mailer_host%'
+    port:                 '%mailer_port%'
+    logging:              true
+    delivery_addresses:   ['temprent@lummetry.ai']
+```
+
+Optiunea de configurare `delivery_address` este cea care forteaza sistemul sa trimita toate e-mail-urile catre adresa `temprent@lummetry.ai`. Pentru a lasa sistemul sa trimita e-mail-urile catre destinatarii originali, trebuie stearsa aceasta optiune.
+
+Toate variabilele mentionate mai sus in `config.yml` sunt definite in `service/app/config/parameters.yml`
+
+### Setarea rapoartelor
+
+Rapoartele fiind externe aplicatiei sunt incarcate intr-un iframe. Pentru a configura meniul de rapoarte din interfata de administrare, trebuie sa definim lista acestora in `service/app/config/parameters.yml`.
+
+```yml
+    reports_endpoint: 'https://temprent.4e.ro/reports'
+    reports:
+        'name one': '/uri/1'
+        'name two': '/uri/2'
+        'name three': '/uri/3'
+```
+
+Unde `reports_endpoint` este adresa la care se afla API-ul de raportare, iar `reports` este o lista de tip cheie-valoare in care *cheia este numele* raportului care va fi afisat in meniu, iar *valoarea este uri-ul* la care se gaseste raportul.
+
+URL-ul format din `reports_endpoint` concatenat cu `report uri` va fi incarcat intr-un iframe in interfata de administrare.

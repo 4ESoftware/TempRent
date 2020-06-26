@@ -41,11 +41,11 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(type="integer", name="type")
+     * @ORM\Column(type="integer", name="type", nullable=true)
      */
-    private $type = 0;
+    private $type = null;
 
     /**
      * @var string|null
@@ -139,7 +139,7 @@ class User extends BaseUser
         $this->auditLog = new ArrayCollection();
     }
 
-    public function getType(): int
+    public function getType(): ?int
     {
         return $this->type;
     }

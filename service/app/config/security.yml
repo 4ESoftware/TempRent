@@ -22,11 +22,13 @@ security:
                 failure_handler: app.login.failure
                 login_path: /login
                 check_path: /login_check
+                success_handler: AppBundle\Security\Authentication\Handler\AuthenticationSuccessHandler
             logout:       true
             anonymous:    true
             oauth:
                 resource_owners:
                     facebook:           "/login/check-facebook"
+                    google:             "/login/check-google"
                 login_path:        /login
                 use_forward:       false
                 failure_path:      /login

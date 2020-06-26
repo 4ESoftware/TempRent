@@ -20,9 +20,15 @@ parameters:
 
     chatbot_api_url: ~
     chatbot_api_port: ~
-
     bid_files_directory: '%kernel.project_dir%/web/uploads/bids'
     geoip_database_directory: '%kernel.project_dir%/var/geoip'
-    facebook_app_id: 594639071483249
-    facebook_app_secret: 2893011fdb0e4449f1338bc7cc382414
+    facebook_app_id: ~
+    facebook_app_secret: ~
+    google_client_id: ~
+    google_client_secret: ~
 
+    reports_endpoint: 'https://temprent.4e.ro/reports'
+    reports:
+        'name one': '/uri/1'
+        'name two': '/uri/2'
+        'name three': '/uri/3'

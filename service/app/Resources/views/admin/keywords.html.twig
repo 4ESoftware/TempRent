@@ -1,32 +1,78 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h2>Application Keywords:</h2> <a href="{{ path('sync_keywords') }}" id="sync"><i class="fa fa-refresh"></i>
-    Synchronize with chatbot</a>
+    <div id="reports-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="report-modal-title">Title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="report-iframe" src="#" style="width: 100%; min-height: 450px; border: 0;"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div class="table-responsive-md">
-        <table class="table table-borderless table-condensed table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Value</th>
-                <th scope="col">Description</th>
-                <th scope="col">Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for keyword in keywords %}
-                <tr>
-                    <td>{{ keyword.id }}</td>
-                    <td>{{ keyword.value }}</td>
-                    <td>{{ keyword.description }}</td>
-                    <td>{% if keyword.status == 1 %}ACTIVE{% else %}INACTIVE{% endif %}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="card" style="width: 100%; margin-top: 25px;">
+        <div class="card-body">
+            <h5 class="card-title">Available application keywords</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Use this link to <a href="{{ path('sync_keywords') }}" id="sync">synchronize
+                    with chatbot API</a>.
+            </h6>
+            <div class="table-responsive-md">
+                <table class="table table-borderless table-condensed table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Value</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for keyword in keywords %}
+                        <tr {% if keyword.status ==0 %}class="text-muted"{% endif %}>
+                            <td>{{ keyword.id }}</td>
+                            <td>{{ keyword.value }}</td>
+                            <td>{{ keyword.description }}</td>
+                            <td>{% if keyword.status == 1 %}ACTIVE{% else %}INACTIVE{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
-{% block stylesheets %}
+{% block javascripts %}
+    <script>
+        $('.report-link').on('click', function (e) {
+            e.preventDefault();
+
+            $('#report-iframe').attr('src', $(this).attr('href'));
+            $('#reports-modal').modal('show');
+        });
+    </script>
+{% endblock %}
+
+{% block reports %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Reports
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for report in reports.list %}
+                <a class="dropdown-item report-link" href="{{ reports.endpoint }}{{ report.uri }}">{{ report.name }}</a>
+            {% endfor %}
+        </div>
+    </li>
 {% endblock %}

@@ -2,8 +2,13 @@
 
 namespace AppBundle\EventSubscriber;
 
+use AppBundle\Entity\Audit;
+use AppBundle\Entity\User;
+use Doctrine\ORM\EntityManager;
 use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\UserEvent;
 use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -11,6 +16,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\SecurityEvents;
+use GeoIp2\Database\Reader;
 
 class CustomEventSubscriber implements EventSubscriberInterface
 {
@@ -20,18 +28,53 @@ class CustomEventSubscriber implements EventSubscriberInterface
     /** @var RequestStack $requestStack */
     private $requestStack;
 
-    public function __construct(UrlGeneratorInterface $router, RequestStack $requestStack)
-    {
+    /** @var UserManagerInterface $userManager */
+    private $userManager;
+
+    /** @var EntityManager $entityManager */
+    private $entityManager;
+
+    /** @var string $geoIPdir */
+    private $geoIPdir;
+
+    public function __construct(
+        UrlGeneratorInterface $router,
+        RequestStack $requestStack,
+        UserManagerInterface $userManager,
+        EntityManager $entityManager,
+        string $geoIPdir
+    ) {
         $this->router = $router;
+        $this->userManager = $userManager;
+        $this->entityManager = $entityManager;
         $this->requestStack = $requestStack;
+        $this->geoIPdir = $geoIPdir;
     }
 
     public static function getSubscribedEvents()
     {
         return [
             FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationCompleted',
+            FOSUserEvents::SECURITY_IMPLICIT_LOGIN => 'onImplicitLogin',
             KernelEvents::REQUEST => 'onRequestValidateLoginFails',
+            SecurityEvents::INTERACTIVE_LOGIN => 'onSecurityInteractiveLogin',
         ];
+    }
+
+    public function onImplicitLogin(UserEvent $event)
+    {
+        /** @var User $user */
+        $user = $event->getUser();
+
+        return $this->logAuditLogin($user);
+    }
+
+    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
+    {
+        /** @var User $user */
+        $user = $event->getAuthenticationToken()->getUser();
+
+        return $this->logAuditLogin($user);
     }
 
     public function onRegistrationCompleted(FormEvent $event)
@@ -58,5 +101,35 @@ class CustomEventSubscriber implements EventSubscriberInterface
         }
 
         return;
+    }
+
+    private function logAuditLogin(User $user)
+    {
+        $ip = $_SERVER['REMOTE_ADDR'];
+
+        $reader = new Reader($this->geoIPdir.'/GeoLite2-City.mmdb');
+        $record = $reader->city($ip);
+
+        $auditEntry = (new Audit())
+            ->setCity($record->city->name)
+            ->setCountry($record->country->name)
+            ->setType(Audit::LOGIN_EVENT)
+            ->setContent(sprintf('User %s loggedin at %s', $user->getUsername(), (new \DateTime())->format(DATE_ATOM)))
+            ->setUser($user)
+            ->setLogTime(new \DateTime())
+            ->setIP($ip)
+        ;
+
+        $user->addAuditLog($auditEntry);
+
+        $this->entityManager->persist($auditEntry);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $session->remove('LAST_FAILED_AUTHENTICATION_TIMESTAMP');
+        $session->remove('FAILED_AUTHENTICATION_COUNT');
+
+        return ;
     }
 }
