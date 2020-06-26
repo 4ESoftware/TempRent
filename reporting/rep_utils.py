@@ -26,7 +26,11 @@ class RepEngine(LummetryObject):
     self.PASS = self.config_data['PASS']
     self.DB = self.config_data['DB']
     self._rep_base = '_get_report_'
-    self.connect()
+    
+    try:
+      self.connect()
+    except:
+      self.P("WARNING! Couldn't connect to the mysql DB!")
     return
   
   def connect(self):
