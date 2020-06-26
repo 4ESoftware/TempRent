@@ -6,8 +6,8 @@ Created on Thu Jun 18 14:04:52 2020
 """
 import pandas as pd
 
-from libraries_pub import Logger
-from libraries_pub import LummetryObject
+from libraries import Logger
+from libraries import LummetryObject
 
 import mysql.connector as mysql
 from time import time
