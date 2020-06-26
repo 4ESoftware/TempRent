@@ -68,7 +68,7 @@ class RepEngine(LummetryObject):
     self.P("  Done loading in {:.1f}s".format(t_elapsed))
     return df
   
-  def _get_report_1(self):
+  def _get_report_1(self, name_only=False):
     """
     Past activity graph: see audit dataset line graph 
 
@@ -77,6 +77,8 @@ class RepEngine(LummetryObject):
     Full qualified path.
 
     """
+    if name_only:
+      return "Past activity graph"
     # plt.style.use('ggplot')
     sns.set()
     last_days = 30
@@ -119,7 +121,7 @@ class RepEngine(LummetryObject):
     return self._save_png(1)
     
   
-  def _get_report_2(self):
+  def _get_report_2(self, name_only=False):
     """
     Pie/Bar report with number of tenders for each tag
 
@@ -128,6 +130,9 @@ class RepEngine(LummetryObject):
     Full qualified path.
 
     """
+    if name_only:
+      return "Tenders per tag"
+    
     sql = (
       "SELECT COUNT(project_id) cnt, tag FROM " +
       "  (SELECT tags.project_id, tags.keyword_id, keywords.value tag" + 
@@ -147,7 +152,7 @@ class RepEngine(LummetryObject):
     # plt.subplots_adjust(left=0.1, bottom=-2.1, right=0.75)
     return self._save_png(2)
   
-  def _get_report_3(self):
+  def _get_report_3(self, name_only=False):
     """
     Number of bids aggregated at week-day level
 
@@ -156,6 +161,9 @@ class RepEngine(LummetryObject):
     Full qualified path.
 
     """
+    if name_only:
+      return "Bids and values"
+    
     df = self._load_sql('SELECT COUNT(*) cnt, SUM(price) vals, DATE(created_at) dt FROM bids GROUP BY dt')
     df = df.sort_values('dt')
     vals = df['vals'].values
@@ -176,10 +184,11 @@ class RepEngine(LummetryObject):
   
   def get_avail_reports(self):
     max_rep = 100
-    avail = []
+    avail = {}
     for i in range(max_rep+1):
       if hasattr(self, self._rep_base + str(i)):
-        avail.append(i)
+        fnc = getattr(self, self._rep_base + str(i))
+        avail[i] = fnc(True)
     return avail
   
   def get_report(self, report_id):
@@ -207,3 +216,4 @@ if __name__ == '__main__':
     
   eng.get_report(3)
   # eng.shutdown()
+  l.P(eng.get_avail_reports())
