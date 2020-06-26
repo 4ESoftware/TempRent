@@ -126,18 +126,3 @@ Optiunea de configurare `delivery_address` este cea care forteaza sistemul sa tr
 
 Toate variabilele mentionate mai sus in `config.yml` sunt definite in `service/app/config/parameters.yml`
 
-### Setarea rapoartelor
-
-Rapoartele fiind externe aplicatiei sunt incarcate intr-un iframe. Pentru a configura meniul de rapoarte din interfata de administrare, trebuie sa definim lista acestora in `service/app/config/parameters.yml`.
-
-```yml
-    reports_endpoint: 'https://temprent.4e.ro/reports'
-    reports:
-        'name one': '/uri/1'
-        'name two': '/uri/2'
-        'name three': '/uri/3'
-```
-
-Unde `reports_endpoint` este adresa la care se afla API-ul de raportare, iar `reports` este o lista de tip cheie-valoare in care *cheia este numele* raportului care va fi afisat in meniu, iar *valoarea este uri-ul* la care se gaseste raportul.
-
-URL-ul format din `reports_endpoint` concatenat cu `report uri` va fi incarcat intr-un iframe in interfata de administrare.
