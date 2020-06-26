@@ -13,7 +13,9 @@ import mysql.connector as mysql
 from time import time
 
 import matplotlib.pyplot as plt
+import seaborn as sns
 import os
+from datetime import datetime
 
 class RepEngine(LummetryObject):
   def __init__(self, **kwargs):
@@ -49,9 +51,17 @@ class RepEngine(LummetryObject):
     cols = cursor.column_names
     dct_res = {cols[i]:[x[i] for x in data] for i,c in enumerate(cols)}
     return pd.DataFrame(dct_res)
+  
+  def _load_sql(self, sql):
+    cursor = self.db.cursor()
+    cursor.execute(sql)
+    data = cursor.fetchall()
+    cols = cursor.column_names
+    dct_res = {cols[i]:[x[i] for x in data] for i,c in enumerate(cols)}
+    return pd.DataFrame(dct_res)
     
   def load_data(self, table):
-    self.P("Loading table '{}".format(table))
+    self.P("Loading table '{}'".format(table))
     t0 = time()
     df = self._load_data(table)
     t_elapsed = time() - t0
@@ -67,19 +77,45 @@ class RepEngine(LummetryObject):
     Full qualified path.
 
     """
+    # plt.style.use('ggplot')
+    sns.set()
     last_days = 30
     df_audit = self.load_data('audit')
-    counts = df_audit.resample('D', on='logTime').id.count()
-    dates = counts.index.strftime('%Y-%m-%d').tolist()
-    vals = counts.values
+    df = df_audit.loc[:,['logTime', 'type','id']]
+    df['date'] = df.logTime.dt.floor('d')
+    df.drop(columns=['logTime'], inplace=True)
+    df_counts = df.groupby(['date','type']).count().unstack().fillna(0).unstack().reset_index().sort_values('date')
+    df_counts['count'] = df_counts[0]
+    df_counts = df_counts.loc[:,['date','type','count']]
+    df_counts['types'] = df_counts['type'].apply(lambda x: 'success' if x==1 else 'failure')
+    df_type1 = df_counts[df_counts.type == 1]
+    df_type2 = df_counts[df_counts.type == 2]
+    
+    dates = df_type1.date.dt.strftime('%Y-%m-%d').tolist()
+    # vals1 = df_type1[0].values
+    # vals2 = df_type2[0].values
     plt.figure(figsize=(13,8))
-    y = vals[-last_days:]
-    x = list(range(1, last_days+1))[:len(vals)]
-    plt.bar(x, y)    
+    x = list(range(0, last_days))[:len(dates)]
+    # _len = len(x)
+    # y1 = vals1[-_len:]
+    # y2 = vals2[-_len:]
+    
+    # plt.bar(x, y1, label='successes')    
+    # plt.bar(x, y2, label='failures')    
+    # plt.xlabel('Days', fontsize=18)
+    # plt.ylabel('Count of actions', fontsize=18)
+    ax = sns.barplot(x='date', hue='types', y='count', data=df_counts)
     plt.xticks(x, dates)
-    plt.xlabel('Days')
-    plt.ylabel('Count of actions')
-    plt.title('Last {} days activity history'.format(last_days))
+    plt.title('Last {} days activity history ({:%Y-%m-%d  %H:%M})'.format(
+      last_days, datetime.now()), fontsize=30)
+    plt.legend(title='Activity type')
+    for p in ax.patches:
+      ax.annotate(
+        "%.2f" % p.get_height(), 
+        (p.get_x() + p.get_width() / 2., p.get_height()),
+        ha='center', va='center', fontsize=11, color='gray', rotation=90, 
+        xytext=(0, 20),textcoords='offset points'
+        )    
     return self._save_png(1)
     
   
@@ -92,6 +128,23 @@ class RepEngine(LummetryObject):
     Full qualified path.
 
     """
+    sql = (
+      "SELECT COUNT(project_id) cnt, tag FROM " +
+      "  (SELECT tags.project_id, tags.keyword_id, keywords.value tag" + 
+      "   FROM tags, keywords WHERE tags.keyword_id=keywords.id) subq" +
+      " GROUP BY tag")
+    df = self._load_sql(sql)
+    df = df.set_index('tag')
+    sns.set()
+    df.plot.pie(y='cnt', figsize=(21,18))
+    plt.title('Density of tags in projects ({:%Y-%m-%d  %H:%M})'.format(
+      datetime.now()), fontsize=30)
+    plt.legend(
+      ncol=5, 
+      loc='lower center', 
+      bbox_to_anchor=(0., -0.2, 1., .102),
+      title='Type of project property (tag)')
+    # plt.subplots_adjust(left=0.1, bottom=-2.1, right=0.75)
     return self._save_png(2)
   
   def _get_report_3(self):
@@ -103,6 +156,22 @@ class RepEngine(LummetryObject):
     Full qualified path.
 
     """
+    df = self._load_sql('SELECT COUNT(*) cnt, SUM(price) vals, DATE(created_at) dt FROM bids GROUP BY dt')
+    df = df.sort_values('dt')
+    vals = df['vals'].values
+    plt.figure(figsize=(13,8))
+    ax = sns.barplot(x='dt', y='cnt', data=df)
+    plt.title('Bids per day with overall values ({:%Y-%m-%d  %H:%M})'.format(
+      datetime.now()), fontsize=30)    
+    plt.xlabel('Date of the bids', fontsize=18)
+    plt.ylabel('Number of bids', fontsize=18)
+    for i, p in enumerate(ax.patches):
+      ax.annotate(
+        "{:,.1f} lei".format(vals[i]), 
+        (p.get_x() + p.get_width() / 2., p.get_height()),
+        ha='left', va='top', fontsize=12, color='black', rotation=90, 
+        xytext=(0, 10),textcoords='offset points'
+        )    
     return self._save_png(3)
   
   def get_avail_reports(self):
@@ -136,5 +205,5 @@ if __name__ == '__main__':
   
   eng = RepEngine(DEBUG=True, log=l)
     
-  eng.get_report(1)
+  eng.get_report(3)
   # eng.shutdown()
