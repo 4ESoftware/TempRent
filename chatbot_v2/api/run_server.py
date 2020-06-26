@@ -308,6 +308,11 @@ class Inference(LummetryObject):
     dct_conversation_layers = bot.dct_conversation_layers_spatii
     conversation_layers = bot.conversation_layers_spatii
     
+    if tip_imobil in bot.no_nr_camere:
+      dct_conversation_layers = bot.dct_conversation_layers_no_nr_camere
+      conversation_layers = bot.conversation_layers_no_nr_camere
+    #endif
+    
     _tmp_conversation_layers = [[] for _ in range(1+max(dct_conversation_layers.values()))]
     
     for bucket_name in prev_bucket_names:
@@ -320,7 +325,7 @@ class Inference(LummetryObject):
       layer = conversation_layers[i]
       
       if set(tmp_layer) < set(layer):
-        return random.choice(list(set(layer ) - set(tmp_layer)))
+        return random.choice(list(set(layer) - set(tmp_layer)))
     #endfor
     
     return
@@ -367,7 +372,7 @@ class Inference(LummetryObject):
     preds = preds[sorted_idx]
     
     if preds[0] < self.thr_valid_user_label:
-      return 'None'
+      return ''
     
     user_label = self.dct_idx2label[sorted_idx[0]]
     
@@ -414,7 +419,10 @@ class Inference(LummetryObject):
     user_label = self._infer_user_label(last_user_replica)
     expected_labels = self._get_expected_labels(last_bot_replica_bucket)
     
-    dct_ret = {NEXT_UTTERANCE: "", USER_LABEL: user_label}
+    dct_ret = {NEXT_UTTERANCE: "", USER_LABEL: ""}
+    if user_label in self.hashtags:
+      dct_ret[USER_LABEL] = user_label
+    
     crt_tip_imobil = self._get_tip_imobil(conversation_id)
 
     if self._is_imobil(user_label) and crt_tip_imobil is None:
@@ -424,6 +432,7 @@ class Inference(LummetryObject):
     
     if user_label not in expected_labels:
       dct_ret[NEXT_UTTERANCE] = 'Te rog reformuleaza raspunsul la ultima intrebare.'
+      dct_ret[USER_LABEL] = ''
       return dct_ret
     #endif
     
@@ -470,7 +479,7 @@ def infer(conv, conv_id):
   return dct[NEXT_UTTERANCE]
 
 if __name__ == '__main__':
-  ONLINE = False
+  ONLINE = True
   
   parser = argparse.ArgumentParser()
   parser.add_argument("-H", "--host", help='The host of the server', type=str, default='127.0.0.1')
@@ -553,7 +562,7 @@ if __name__ == '__main__':
   eng = Inference(model=model, dct_config_labels=dct_config_labels, log=log)
   
   ######## TEST ZONE #########
-  if True:
+  if False:
     conversation = []
     intro, conversation_id = start_conv()
     conversation.append(intro)
