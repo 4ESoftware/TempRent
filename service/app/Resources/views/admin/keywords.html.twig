@@ -71,7 +71,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             {% for report in reports %}
-                <a class="dropdown-item report-link" href="{{ report.id }}">{{ report.name }}</a>
+                <a class="dropdown-item report-link" href="{{ path('admin_view_report', { reportId: report.id } ) }}">{{ report.name }}</a>
             {% endfor %}
         </div>
     </li>

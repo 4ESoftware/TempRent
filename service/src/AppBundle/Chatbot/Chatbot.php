@@ -110,4 +110,24 @@ class Chatbot
 
         return $reports;
     }
+
+    public function loadReport(int $reportId, string $mode = self::MODE_BASE64)
+    {
+        $chatbotResponse = $this->client->request('POST', $this->apiUrl, [
+            RequestOptions::JSON => [
+                'JOB' => self::GET_REPORT,
+                'REPORT_ID' => $reportId,
+                'PNG_MODE' => $mode,
+            ]
+        ]);
+
+        $content = json_decode($chatbotResponse->getBody()->getContents(), 1);
+
+        $pre = '';
+        if ($mode == self::MODE_BASE64) {
+            $pre = 'data:image/png;base64, ';
+        }
+
+        return $pre.$content['PNG'];
+    }
 }

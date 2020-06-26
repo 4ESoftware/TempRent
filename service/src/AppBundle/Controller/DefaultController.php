@@ -73,8 +73,13 @@ class DefaultController extends Controller
             );
         }
 
+        $creatorId = null;
+        if ($user->getType() === User::USER_TYPE_CUSTOMER) {
+            $creatorId = $user->getId();
+        }
+
         /** @var Project[] $projects */
-        $projects = $em->getRepository(Project::class)->findByKeywordIds($tags);
+        $projects = $em->getRepository(Project::class)->findByKeywordIds($tags, $creatorId);
 
         $toReturn = [];
         foreach ($projects as $project) {

@@ -15,6 +15,7 @@ use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends Controller
@@ -58,8 +59,17 @@ class AdminController extends Controller
 
         return $this->render('admin/projects.html.twig', [
             'projects' => $projects,
-            'reports' => [],
+            'reports' => $this->reports,
         ]);
+    }
+
+    /**
+     * @Route("/admin/reports/{reportId}", name="admin_view_report")
+     */
+    public function viewReport(int $reportId)
+    {
+        $pngContent = $this->chatbot->loadReport($reportId, Chatbot::MODE_BASE64);
+        return new Response('<div><img src="'.$pngContent.'" style="width: 950px;" alt="Temprent Admin Report; Report Id: '.$reportId.'"/></div>');
     }
 
     /**
@@ -159,7 +169,7 @@ class AdminController extends Controller
             'public' => $public,
             'suppliers' => $suppliers,
             'customers' => $customers,
-            'reports' => [],
+            'reports' => $this->reports,
         ]);
     }
 

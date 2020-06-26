@@ -10,17 +10,32 @@ namespace AppBundle\Repository;
  */
 class ProjectRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findByKeywordIds(array $ids): array
+    public function findByKeywordIds(array $ids, $creatorId): array
     {
         $em = $this->getEntityManager();
-        $projects = $em->createQuery('SELECT DISTINCT p
+
+        if ($creatorId == null) {
+            $projects = $em->createQuery('SELECT DISTINCT p
                 FROM AppBundle:Project p
                 INNER JOIN p.tags t
                 INNER JOIN t.keyword k
                 WHERE k.id IN (:ids)
                 ORDER BY p.createdAt DESC')
-            ->setParameter(':ids', $ids)
-            ->getResult();
+                ->setParameter(':ids', $ids)
+                ->getResult();
+        } else {
+            $projects = $em->createQuery('SELECT DISTINCT p
+                FROM AppBundle:Project p
+                INNER JOIN p.tags t
+                INNER JOIN t.keyword k
+                WHERE k.id IN (:ids)
+                    AND
+                    p.creator = :creator
+                ORDER BY p.createdAt DESC')
+                ->setParameter(':ids', $ids)
+                ->setParameter(':creator', $creatorId)
+                ->getResult();
+        }
 
         return $projects;
     }

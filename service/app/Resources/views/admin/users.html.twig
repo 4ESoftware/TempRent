@@ -219,8 +219,8 @@
             Reports
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            {% for report in reports.list %}
-                <a class="dropdown-item report-link" href="{{ reports.endpoint }}{{ report.uri }}">{{ report.name }}</a>
+            {% for report in reports %}
+                <a class="dropdown-item report-link" href="{{ path('admin_view_report', { reportId: report.id } ) }}">{{ report.name }}</a>
             {% endfor %}
         </div>
     </li>
