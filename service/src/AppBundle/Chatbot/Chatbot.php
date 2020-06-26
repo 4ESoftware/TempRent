@@ -2,6 +2,7 @@
 
 namespace AppBundle\Chatbot;
 
+use AppBundle\Chatbot\Models\ChatbotReport;
 use AppBundle\Chatbot\Models\Hashtag;
 use AppBundle\Chatbot\Models\Reply;
 use AppBundle\Entity\ConversationLine;
@@ -13,6 +14,11 @@ class Chatbot
     public const GET_HASHTAGS_JOB = 'GET_HASHTAGS';
     public const INFER_CHATBOT_JOB = 'INFER_CHATBOT';
     public const START_CONVERSATION_JOB = 'START_CONVERSATION';
+    public const GET_AVAILABLE_REPORTS = 'GET_AVAIL_REPORTS';
+    public const GET_REPORT = 'GET_REPORT';
+
+    public const MODE_PATH = 'path';
+    public const MODE_BASE64 = 'base64';
 
     private $apiUrl = null;
 
@@ -66,7 +72,7 @@ class Chatbot
     public function sendReply(ConversationLine $reply)
     {
         $payload = [
-            'JOB' => 'INFER_CHATBOT',
+            'JOB' => self::INFER_CHATBOT_JOB,
             'CONVERSATION' => $reply->getProject()->getTranscriptAsArray(),
         ];
 
@@ -85,5 +91,23 @@ class Chatbot
         }
 
         return new Reply($content->NEXT_UTTERANCE, $content->USER_LABEL);
+    }
+
+    public function getReports()
+    {
+        $chatbotResponse = $this->client->request('POST', $this->apiUrl, [
+            RequestOptions::JSON => [
+                'JOB' => self::GET_AVAILABLE_REPORTS,
+            ]
+        ]);
+
+        $content = json_decode($chatbotResponse->getBody()->getContents(), 1);
+
+        $reports = [];
+        foreach ($content['REPORTS'] as $reportId => $reportName) {
+            $reports[] = new ChatbotReport($reportId, $reportName);
+        }
+
+        return $reports;
     }
 }

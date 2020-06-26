@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Chatbot\Chatbot;
+use AppBundle\Chatbot\Models\ChatbotReport;
 use AppBundle\Chatbot\Models\Hashtag;
 use AppBundle\Entity\Audit;
 use AppBundle\Entity\Bid;
@@ -18,32 +19,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends Controller
 {
-    /** @var array $reportsConfig */
-    private $reportsConfig = [];
+    /** @var Chatbot $chatbot */
+    private $chatbot;
 
-    /** @var string|null $reportingAPIurl */
-    private $reportingAPIurl = null;
-
-    /** @var array $reports */
+    /** @var ChatbotReport[] $reports */
     private $reports = [];
 
-    public function __construct(array $reportsConfig, string $reportingAPIurl)
+    public function __construct(Chatbot $chatbot)
     {
-        $this->reportsConfig = $reportsConfig;
-        $this->reportingAPIurl = $reportingAPIurl;
-
-        $reportList = [];
-        foreach ($this->reportsConfig as $name => $uri) {
-            $reportList[] = [
-                'name' => $name,
-                'uri' => $uri,
-            ];
-        }
-
-        $this->reports = [
-            'endpoint' => $this->reportingAPIurl,
-            'list' => $reportList,
-        ];
+        $this->chatbot = $chatbot;
+        $this->reports = $chatbot->getReports();
     }
 
     /**
@@ -73,7 +58,7 @@ class AdminController extends Controller
 
         return $this->render('admin/projects.html.twig', [
             'projects' => $projects,
-            'reports' => $this->reports,
+            'reports' => [],
         ]);
     }
 
@@ -128,10 +113,12 @@ class AdminController extends Controller
 
                         return false;
                     }, $tag->getBids()->toArray()),
-                    function ($supplier) {
-                        if ($supplier) { return true; }
-                        return false;
-                    }),
+                        function ($supplier) {
+                            if ($supplier) {
+                                return true;
+                            }
+                            return false;
+                        }),
                 ];
             }, $project->getTags()->toArray());
         }
@@ -172,7 +159,7 @@ class AdminController extends Controller
             'public' => $public,
             'suppliers' => $suppliers,
             'customers' => $customers,
-            'reports' => $this->reports,
+            'reports' => [],
         ]);
     }
 
