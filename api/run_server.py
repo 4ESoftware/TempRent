@@ -29,8 +29,10 @@ JOB_GET_AVAIL_REPORTS = 'GET_AVAIL_REPORTS'
 JOB_GET_REPORT = 'GET_REPORT'
 REPORTS = 'REPORTS'
 REPORT_ID = 'REPORT_ID'
-PNG_PATH = 'PNG_PATH'
-
+PNG_MODE = 'PNG_MODE'
+PNG_MODE_BASE64 = 'base64'
+PNG_MODE_PATH = 'path'
+PNG = 'PNG'
 
 
 # custom_objects: dict with 'custom_name': custom_function
@@ -308,15 +310,28 @@ class Inference(LummetryObject):
         raise ValueError("The input JSON must contain the report id as value for key {}"
                          .format(REPORT_ID))
       
-      return self._get_report(report_id=dct_params[REPORT_ID])
+      if PNG_MODE not in dct_params:
+        raise ValueError("The input JSON must contain the report png mode as value for key {}"
+                         .format(PNG_MODE))
+      
+      png_mode = dct_params[PNG_MODE]
+      possible_modes = [PNG_MODE_BASE64, PNG_MODE_PATH]
+      if png_mode not in possible_modes:
+        raise ValueError("Value {} for key {} should be one of these: {}"
+                         .format(png_mode, PNG_MODE, possible_modes))
+      
+      
+      return self._get_report(report_id=dct_params[REPORT_ID],
+                              png_mode=png_mode)
       
     return
 
   def _get_avail_reports(self):
     return {REPORTS: self.eng_reporting.get_avail_reports()}
 
-  def _get_report(self, report_id):
-    return {PNG_PATH: self.eng_reporting.get_report(report_id)}
+  def _get_report(self, report_id, png_mode):
+    return {PNG: self.eng_reporting.get_report(report_id,
+                                               png_mode=png_mode)}
 
   def _get_hashtags(self):
     return {HASHTAGS: self.hashtags}
