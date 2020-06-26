@@ -122,8 +122,8 @@ class RepEngine(LummetryObject):
         ha='center', va='center', fontsize=11, color='gray', rotation=90, 
         xytext=(0, 20),textcoords='offset points'
         )    
-    return self._save_png(1)
-    
+    return
+
   
   def _get_report_2(self, name_only=False):
     """
@@ -154,7 +154,7 @@ class RepEngine(LummetryObject):
       bbox_to_anchor=(0., -0.2, 1., .102),
       title='Type of project property (tag)')
     # plt.subplots_adjust(left=0.1, bottom=-2.1, right=0.75)
-    return self._save_png(2)
+    return
   
   def _get_report_3(self, name_only=False):
     """
@@ -183,8 +183,8 @@ class RepEngine(LummetryObject):
         (p.get_x() + p.get_width() / 2., p.get_height()),
         ha='left', va='top', fontsize=12, color='black', rotation=90, 
         xytext=(0, 10),textcoords='offset points'
-        )    
-    return self._save_png(3)
+        )   
+    return
   
   def get_avail_reports(self):
     max_rep = 100
@@ -195,17 +195,29 @@ class RepEngine(LummetryObject):
         avail[i] = fnc(True)
     return avail
   
-  def get_report(self, report_id):
+  def get_report(self, report_id, png_mode='base64', force_save=False):
+    if type(report_id) == str:
+      report_id = int(report_id)
+    assert png_mode in ['path', 'base64'], "Unknown png_mode '{}'".format(png_mode)
     avails = self.get_avail_reports()
     if report_id not in avails:
       self.P("ERROR: must supply a valid report number {}".format(avails))
       return None
+    self.P("Generating report {} - '{}'".format(report_id, avails[report_id]))
     rep_name = '_get_report_'+str(report_id)
     rep_fun = getattr(self, rep_name)
-    return rep_fun()
+    rep_fun()
+    if png_mode == 'path' or force_save:
+      path = self._save_png(report_id)
+    
+    if png_mode == 'path':
+      return path
+    else:
+      return self.log.plt_to_base64(plt)
     
   def _save_png(self, report_id):
     fn = self.log.save_plot(plt, label='REP_{:02d}'.format(report_id))
+    plt.close()
     return fn
     
   def shutdown(self):
@@ -217,7 +229,9 @@ if __name__ == '__main__':
   l = Logger("TRR", config_file='config/config.txt')
   
   eng = RepEngine(DEBUG=True, log=l)
-    
-  eng.get_report(3)
-  # eng.shutdown()
+
   l.P(eng.get_avail_reports())
+  
+  simg = eng.get_report('3', png_mode='path')
+  l.P(simg)
+  # eng.shutdown()
