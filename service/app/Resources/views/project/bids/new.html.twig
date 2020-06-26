@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% set project = tag.project %}
+    <div class="row">
+        <div class="col-12 mb-3">
+            <a href="{{ path('project_details', {id: project.id}) }}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back to project</a>
+        </div>
+    </div>
+
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title">Bidding for {{ tag.keyword.value }} on {{ project.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Good luck!</h6>
+            <div>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <input type="submit" class="btn btn-success" value="Send bid!"/>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

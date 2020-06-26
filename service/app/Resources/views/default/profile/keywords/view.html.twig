@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="card" style="width: 100%; margin-top: 25px;">
+        <div class="card-body">
+            <h5 class="card-title">Your current keywords</h5>
+            <h6 class="card-subtitle mb-2 text-muted">You can remove the ones you don't want anymore.</h6>
+            {% for keyword in user.keywords %}
+                <div class="badge
+            {% if keyword.status == 0 %}
+            badge-danger
+            {% else %}
+            badge-info
+            {% endif %}
+            ">{{ keyword.value }}
+                    <a class="btn btn-sm btn-light" href="{{ path('remove_keyword', { id: keyword.id }) }}">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="card" style="width: 100%; margin-top: 25px;">
+        <div class="card-body">
+            <h5 class="card-title">Available application keywords</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Use the searchbar below to filter this list.</h6>
+            <div class="col-12">
+                <input type="text" class="form-control" id="filter">
+            </div>
+            <ul id="keyword-list" class="mt-4">
+                {% for keyword in keywords %}
+                    {% if keyword.keyword.status != 0 %}
+                        <li>
+                            {% if keyword.selected == true %}
+                                <strong>{{ keyword.keyword.value }}</strong> | <a
+                                    href="{{ path('remove_keyword', { id: keyword.keyword.id }) }}"><i
+                                        class="fa fa-minus-sign"></i>
+                                Remove</a>
+                            {% else %}
+                                {{ keyword.keyword.value }} | <a
+                                    href="{{ path('add_keyword', { id: keyword.keyword.id }) }}"><i
+                                        class="fa fa-plus-sign"></i> Add</a>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function renderKeywords(keywords) {
+            $('#keyword-list').empty();
+
+            keywords.forEach(function (keyword) {
+                if (keyword.selected) {
+                    var item = $('<li><strong>' + keyword.keyword.value + '</strong> | <a href="/profile/keywords/remove/' + keyword.keyword.id + '"><i class="fa fa-minus-sign"></i> Remove</a></li>');
+                } else {
+                    var item = $('<li>' + keyword.keyword.value + ' | <a href="/profile/keywords/add/' + keyword.keyword.id + '"><i class="fa fa-plus-sign"></i> Add</a></li>');
+                }
+
+                $('#keyword-list').append(item);
+            });
+        }
+
+        $('#filter').on('keyup', function (e) {
+            var text = $(this).val();
+
+            $.ajax({
+                url: "/profile/keywords/filter",
+                method: "POST",
+                data: {text: text},
+                dataType: "json"
+            }).done(function (jsonData) {
+                renderKeywords(jsonData.keywords);
+            });
+
+        });
+    </script>
+{% endblock %}

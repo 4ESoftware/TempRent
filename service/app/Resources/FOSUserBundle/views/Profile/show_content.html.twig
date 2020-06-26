@@ -1,0 +1,178 @@
+<div class="col-md-12">
+    <div class="profile-sidebar">
+        <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+                {{ user.fullName }} ({{ user.username }})
+            </div>
+            <div class="profile-usertitle-job">
+                {% if user.type == 1 %}Supplier{% elseif user.type == 2 %}Customer{% else %}Public{% endif %}
+            </div>
+            <div>
+                <p>{{ user.email }}</p>
+            </div>
+        </div>
+        <div class="profile-userbuttons">
+            <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i>
+                Edit</a>
+            <a href="{{ path('delete_user', {id: user.id}) }}" class="btn btn-danger btn-sm"
+               onclick="return confirm('Are you sure? this operation cannot be undone!');"><i class="fa fa-trash"></i>
+                Delete</a>
+        </div>
+
+        {% if user.type == null %}
+            <div class="mt-5 ml-5 mr-5">
+                <div class="alert alert-primary" role="alert">
+                    <p>You haven't had the chance to tell us your purpose here:</p>
+                    <p style="margin-left: 25px;margin-bottom: 0;">- Are you just looking around? Set your profile
+                        as <a href="{{ path('set_user_type', {type: 0}) }}" class="btn btn-link"
+                              style="padding: 0px 0px 2px;">public</a>.
+                    </p>
+                    <p style="margin-left: 25px;margin-bottom: 0;">- Are you an awesome supplier looking for work?
+                        Mark your profile as <a href="{{ path('set_user_type', {type: 1}) }}"
+                                                class="btn btn-link"
+                                                style="padding: 0px 0px 2px;">supplier</a>.
+                    </p>
+                    <p style="margin-left: 25px;">- Are you looking for a team of hardworkers?
+                        Begin your <a href="{{ path('set_user_type', {type: 2}) }}"
+                                      class="btn btn-link"
+                                      style="padding: 0px 0px 2px;">customer</a>
+                        journey.</p>
+                    <p>Unfortunately you'll have to login again after this. :)</p>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if user.type != null %}
+            <div class="user-company mt-5 ml-5 mr-5">
+                {% if user.company == null %}
+                    <div class="alert alert-primary" role="alert">
+                        No company data provided, please <a href="{{ path('company_new') }}">add</a> one.
+                    </div>
+                {% else %}
+                    <div>
+                        <p><strong>Company Details</strong> <a href="{{ path('company_edit', {id: user.company.id}) }}"><i
+                                        class="fa fa-pencil"></i>Edit</a></p>
+                        <p><strong>{{ user.company.name }}</strong></p>
+                        <p><i class="fa fa-home"></i> {{ user.company.address }}
+                        <p><i class="fa fa-phone"></i> {{ user.company.phone }}</p>
+                        <div class="alert alert-light">
+                            <p>Identificaion No: {{ user.company.cui }}</p>
+                            <p>Bank: {{ user.company.bank }}</p>
+                            <p>Iban: {{ user.company.iban|anoniban }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if is_granted('ROLE_SUPPLIER') %}
+                <div class="user-company mt-5 ml-5 mr-5">
+                    {% if user.keywords|length == 0 %}
+                        <div class="alert alert-primary" role="alert">
+                            You haven't selected any <strong>keywords</strong>. Please <a
+                                    href="{{ path('view_keywords') }}">select</a> a few.
+                        </div>
+                    {% else %}
+                        <div>
+                            <p><strong>Keywords</strong> <a href="{{ path('view_keywords') }}"><i
+                                            class="fa fa-pencil"></i>Edit</a>
+                            </p>
+                            {% for keyword in user.keywords %}
+                                <span class="badge {% if keyword.status == 1 %}badge-info{% else %}badge-danger{% endif %}">{{ keyword.value }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="ml-5 mt-5 mr-5" style="padding-left: 17px; width: 100%;"><h5>My bids:</h5></div>
+                </div>
+                {% if user.bids|length == 0 %}
+                    <div class="alert alert-success"
+                         style="width: auto; margin-left: 50px; margin-right: 50px; margin-top: 10px;">
+                        Try bidding on a project! <a href="{{ path('homepage') }}" class="btn btn-success">See the
+                            projects!</a>
+                    </div>
+                {% else %}
+                    {% for bid in user.bids %}
+                        <div class="card" style="width: auto; margin-left: 50px; margin-right: 50px; margin-top: 10px;">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    {{ bid.tag.keyword.value }}
+                                    <div class="pull-right">
+                                        {% if bid.status == 1 %}
+                                            <span class="badge badge-info">PENDING</span>
+                                        {% elseif bid.status == 2 %}
+                                            <span class="badge badge-success">ACCEPTED</span>
+                                        {% else %}
+                                            <span class="badge badge-danger">REJECTED</span>
+                                        {% endif %}
+                                    </div>
+                                </h5>
+                                <h6 class="card-subtitle mb-2 text-muted">on project: <a
+                                            href="{{ path('project_details', {id: bid.tag.project.id}) }}">{{ bid.tag.project.name }}</a>
+                                </h6>
+                                <div style="margin-top: 10px; margin-bottom: 10px;">
+                                    <p><strong>Price:</strong> {{ bid.price }}</p>
+                                    <p><strong>Note:</strong> {{ bid.note }}</p>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div class="pull-right"><a
+                                            href="{{ path('project_view_bid', {bid: bid.id, tag: bid.tag.id, project: bid.tag.project.id }) }}"
+                                            class="btn btn-success">View Bid!</a></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+
+            {% if is_granted('ROLE_CUSTOMER') %}
+                <div class="row">
+                    <div class="ml-5 mt-5 mr-5" style="padding-left: 17px; width: 100%;"><h5>My Projects:</h5></div>
+                </div>
+
+                {% if user.projects|length == 0 %}
+                    <div class="alert alert-success"
+                         style="width: auto; margin-left: 50px; margin-right: 50px; margin-top: 10px;">
+                        Try our chatbot to add a new project! <a href="{{ path('project_add') }}"
+                                                                 class="btn btn-success">Let's
+                            talk!</a>
+                    </div>
+                {% else %}
+
+                    {% for project in user.projects %}
+                        <div class="card" style="width: auto; margin-left: 50px; margin-right: 50px; margin-top: 10px;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ project.name }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">posted by: <a
+                                            href="{{ path('view_user_profile', {id: project.creator.id}) }}">{{ project.creator.fullName }}</a>
+                                </h6>
+                                <div style="margin-top: 10px; margin-bottom: 10px;">
+                                    {% for tag in project.tags %}
+                                        <div class="badge badge-info" style="font-size: 1.1em; padding: 5px 10px;">
+                                            {{ tag.keyword.value }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div class="pull-left project-stats" style="line-height: 35px;">
+                <span class="badge badge-primary"
+                      style="margin-left: 5px;">%Completion: {{ project.stats.completion }}%</span>
+                                    <span class="badge badge-primary"
+                                          style="margin-left: 5px;">Total Bidders: {{ project.stats.bidders }}</span>
+                                    <span class="badge badge-primary"
+                                          style="margin-left: 5px;">Files Uploaded: {{ project.stats.files }}</span>
+                                </div>
+                                <div class="pull-right"><a href="{{ path('project_view', {id: project.id}) }}"
+                                                           class="btn btn-success">View Details!</a></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <title>{% block title %}TempRent App{% endblock %}</title>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
+    <style>
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+            background-color: #f5f5f5;
+        }
+
+        .body-background-image {
+            background-image: url("/background.png");
+            background-color: #FFFFFF;
+            background-position: right;
+            background-repeat: no-repeat;
+            background-size: auto;
+            background-position-y: inherit;
+            background-position-x: right;
+            background-attachment: fixed;
+        }
+    </style>
+
+    {% block stylesheets %}{% endblock %}
+
+    <!-- JS, Popper.js, and jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+</head>
+<body class="body-background-image">
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0&appId=594639071483249&autoLogAppEvents=1" nonce="Fn3kToTD"></script>
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Temp Rent</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ path('admin_view_keywords') }}">Keywords</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('admin_view_users') }}">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('admin_view_projects') }}">Projects</a>
+                </li>
+                {% block reports %}{% endblock %}
+            {% else %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ path('homepage') }}">Dashboard <span class="sr-only">(current)</span></a>
+                </li>
+            {% endif %}
+        </ul>
+
+        <ul class="navbar-nav ml-auto pull-right">
+            <li class="nav-item">
+                <div class="fb-share-button" data-href="https://temprent.4e.ro" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftemprent.4e.ro%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>            </li>
+            <li class="nav-item">
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    <a href="{{ path('fos_user_profile_show') }}">{{ app.user.fullName }}</a> | <a
+                        href="{{ path('fos_user_security_logout') }}">Log out</a>
+                {% else %}
+                    <a href="{{ path('fos_user_security_login') }}">Log in</a> |  <a
+                        href="{{ path('fos_user_registration_register') }}">Register</a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</nav>
+
+{% if app.request.hasPreviousSession %}
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="flash-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+
+<div class="container" style="margin-bottom: 70px; margin-top: 80px;">
+    {% block body %}{% endblock %}
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="col-12">
+            <div style="font-size: small;line-height: 60px;">
+                <p class="float-left mb-0"><i class="fa fa-copyright"></i> 2020</p>
+                <p class="float-right mb-0"><a href="/privacy" target="_blank" class="btn btn-link" style="font-size: small;">Privacy
+                        &amp; Confidentiality</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>

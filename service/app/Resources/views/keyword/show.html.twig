@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Keyword</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ keyword.id }}</td>
+            </tr>
+            <tr>
+                <th>Value</th>
+                <td>{{ keyword.value }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_keyword_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_keyword_edit', { 'id': keyword.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

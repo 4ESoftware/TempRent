@@ -1,0 +1,118 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+parameters:
+    locale: en
+
+framework:
+    translator: { fallbacks: ['%locale%'] }
+    secret: '%secret%'
+    router:
+        resource: '%kernel.project_dir%/app/config/routing.yml'
+        strict_requirements: ~
+    form: ~
+    csrf_protection: ~
+    validation: { enable_annotations: true }
+    default_locale: '%locale%'
+    trusted_hosts: ~
+    session:
+        handler_id: ~
+    fragments: ~
+    http_method_override: true
+    assets: ~
+    php_errors:
+        log: true
+    templating:
+        engines: ['twig', 'php']
+
+# Twig Configuration
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    form_themes: ['bootstrap_4_layout.html.twig']
+    globals:
+        domain: 'https://temprent.4e.ro'
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver: pdo_mysql
+        host: '%database_host%'
+        port: '%database_port%'
+        dbname: '%database_name%'
+        user: '%database_user%'
+        password: '%database_password%'
+        charset: UTF8
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+
+swiftmailer:
+    transport:            '%mailer_transport%'
+    username:             '%mailer_user%'
+    password:             '%mailer_password%'
+    host:                 '%mailer_host%'
+    port:                 '%mailer_port%'
+    logging:              true
+    delivery_addresses:   ['temprent@lummetry.ai']
+
+sensio_framework_extra:
+    router:
+        annotations: false
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+    from_email:
+        address: "no-reply@lummetry.ai"
+        sender_name: "Lummetry No-Reply"
+    registration:
+        form:
+            type: AppBundle\Form\RegistrationType
+#        confirmation:
+#            enabled: true
+    profile:
+        form:
+            type: AppBundle\Form\ProfileType
+
+
+monolog:
+    handlers:
+        file_log:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+
+        syslog_handler:
+            type: syslog
+            level: error
+
+hwi_oauth:
+    connect:
+        account_connector: my_user_provider
+    firewall_name: main
+    fosub:
+        username_iterations: 30
+        properties:
+            facebook: facebook_id
+            google: google_id
+    resource_owners:
+        facebook:
+            type:                facebook
+            client_id:           "%facebook_app_id%"
+            client_secret:       "%facebook_app_secret%"
+            infos_url:           "https://graph.facebook.com/v7.0/me?fields=name,email"
+            authorization_url:   "https://www.facebook.com/v7.0/dialog/oauth"
+            access_token_url:    "https://graph.facebook.com/v7.0/oauth/access_token"
+            revoke_token_url:    "https://graph.facebook.com/v7.0/me/permissions"
+            scope:               "email,public_profile"
+        google:
+            type:                google
+            client_id:           "%google_client_id%"
+            client_secret:       "%google_client_secret%"
+            scope:               "email profile"

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Company edit</h1>
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            {{ form_start(edit_form) }}
+            {{ form_widget(edit_form) }}
+            <input type="submit" class="btn btn-success btn-block" value="Edit"/>
+            {{ form_end(edit_form) }}
+        </div>
+    </div>
+{% endblock %}

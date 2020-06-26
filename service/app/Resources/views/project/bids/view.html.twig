@@ -1,0 +1,231 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme addFiles _self %}
+
+{% block form_label -%}
+    {% if label is not same as(false) -%}
+        {%- if compound is defined and compound -%}
+            {%- set element = 'legend' -%}
+            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' col-form-label')|trim}) -%}
+        {%- else -%}
+            {%- set label_attr = label_attr|merge({for: id}) -%}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>
+        <span class="fa-stack" style="font-size: 0.6em;">
+                            <i class="fa fa-file-o fa-stack-2x"></i>
+                            <i class="fa fa-plus fa-stack-1x"></i>
+                        </span>
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}{% block form_label_errors %}{{- form_errors(form) -}}{% endblock form_label_errors %}
+        </{{ element|default('label') }}>
+    {%- else -%}
+        {%- if errors|length > 0 -%}
+            <div id="{{ id }}_errors" class="mb-2">
+                {{- form_errors(form) -}}
+            </div>
+        {%- endif -%}
+    {%- endif -%}
+{%- endblock form_label %}
+
+{% block body %}
+    <div id="files-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Files</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive-md" id="files-modal-content">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submit-new-files">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% set project = bid.tag.project %}
+    <div class="row">
+        <div class="col-12 mb-3">
+            <a href="{{ path('project_details', {id: project.id}) }}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back to project</a>
+        </div>
+    </div>
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title"><a href="{{ path('project_details', {id: project.id}) }}">{{ project.name }}</a></h5>
+            <h6 class="card-subtitle mb-2 text-muted">posted by: <a
+                        href="{{ path('view_user_profile', {id: project.creator.id}) }}">{{ project.creator.fullName }}</a>
+            </h6>
+            <div style="margin-top: 10px; margin-bottom: 10px;">
+                {% for tag in project.tags %}
+                    <div class="badge badge-info"
+                         style="font-size: 1.1em; padding: 5px 10px;">
+                        {{ tag.keyword.value }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            <div class="pull-left project-stats" style="line-height: 35px;">
+                <span class="badge badge-primary"
+                      style="margin-left: 5px;">%Completion: {{ project.stats.completion }}%</span>
+                <span class="badge badge-primary"
+                      style="margin-left: 5px;">Total Bidders: {{ project.stats.bidders }}</span>
+                <span class="badge badge-primary"
+                      style="margin-left: 5px;">Files Uploaded: {{ project.stats.files }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-3" style="width: 100%;">
+        <div class="card-header">
+            <h5 class="card-title">
+                <strong>{{ bid.tag.keyword.value }}</strong>
+                {% if bid.status == 1 %}
+                    <span class="badge badge-info">PENDING</span>
+                {% elseif bid.status == 2 %}
+                    <span class="badge badge-success">ACCEPTED</span>
+                {% else %}
+                    <span class="badge badge-danger">REJECTED</span>
+                {% endif %}
+                <div class="pull-right">
+                    {% if bid.tag.project.status != 7 %}
+                        {% if is_granted('ROLE_CUSTOMER') %}
+                            <a href="{{ path('accept_bid', {project: bid.tag.project.id, tag: bid.tag.id, bid: bid.id}) }}"
+                               class="btn btn-success"><i class="fa fa-check"></i> Accept</a>
+                            <a href="{{ path('reject_bid', {project: bid.tag.project.id, tag: bid.tag.id, bid: bid.id}) }}"
+                               class="btn btn-danger"><i class="fa fa-ban"></i> Reject</a>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_SUPPLIER') %}
+                            <a class="btn btn-link"
+                               href="{{ path('project_edit_bid', {project: bid.tag.project.id, tag: bid.tag.id, bid: bid.id} ) }}"><i
+                                        class="fa fa-pencil"></i> Edit</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ bid.createdAt|date('d/m') }}</h6>
+        </div>
+        <div class="card-body">
+            <p>Offered price: {{ bid.price }}</p>
+            <h6>Notes:</h6>
+            <p>{{ bid.note }}</p>
+        </div>
+        <div class="card-footer text-muted">
+            <h5>
+                Attachments:
+                <div class="pull-right">
+                    <div id="files-summary" style="display: none; clear: both; font-size: .7em;">
+                        <p><a href="#" id="view-uploaded-files" class="text-muted"></a></p>
+                    </div>
+                    {{ form_start(addFiles, {'action': path('add_files_on_bid', {project: bid.tag.project.id, tag: bid.tag.id, bid: bid.id}), 'attr': {'id': 'add_files_form', 'style': 'display: inline-block;'}}) }}
+                    {{ form_label(addFiles.files) }}
+                    {{ form_widget(addFiles.files) }}
+                    {{ form_end(addFiles) }}
+                </div>
+            </h5>
+
+            {% if bid.status == 2 and bid.tag.project.status == 7 %}
+                <div style="width: 100%;">
+                    <a class="btn btn-primary" href="{{ path('generate_contract', {id: bid.id}) }}">Download
+                        contract</a>
+                </div>
+            {% endif %}
+
+            <table class="table table-responsive table-borderless">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">File</th>
+                    <th scope="col">Creator</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for file in bid.files %}
+                    <tr>
+                        <td>{{ file.uploadedAt|date("d/m") }}</td>
+                        <td>
+                            <a href="{{ path('project_download_file', {bid: bid.id, file: file.id }) }}">{{ file.filename }}</a><br>
+                        </td>
+                        <td>{{ file.creator.fullName }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        input[type="file"] {
+            display: none;
+        }
+
+        #add-files-label {
+            display: inline-block;
+            cursor: pointer;
+            font-size: .8em;
+            color: #007bff;
+        }
+
+        #add-files-label:hover {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        files = null;
+
+        $('#submit-new-files').on('click', function () {
+            $('#add_files_form').submit();
+        });
+
+        $('#view-uploaded-files').on('click', function () {
+            $('#files-modal-content').empty();
+
+            var table = $(`<table class="table table-borderless table-condensed table-striped"><tbody id="table-body"></tbody></table>`);
+            $('#files-modal-content').append(table);
+
+            var tbody = $('#table-body');
+
+            for (var i = 0; i < files.length; i++) {
+                var newRow = $('<tr><td>' + files[i].name + '<td></tr>');
+                tbody.append(newRow);
+            }
+
+            $('#files-modal').modal('show');
+        })
+
+        function filesSummaryUpdate() {
+            $('#view-uploaded-files').text(files.length + ' Files Added. (click to view)');
+            $('#files-summary').attr('style', 'display: inline-block; clear: both; font-size: .7em;');
+        }
+
+        $('#appbundle_bid_files').on('change', function () {
+            files = $('#appbundle_bid_files')[0].files;
+
+            filesSummaryUpdate();
+        });
+    </script>
+{% endblock %}

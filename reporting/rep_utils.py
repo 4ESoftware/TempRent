@@ -6,8 +6,8 @@ Created on Thu Jun 18 14:04:52 2020
 """
 import pandas as pd
 
-from libraries_pub import Logger
-from libraries_pub import LummetryObject
+from libraries import Logger
+from libraries import LummetryObject
 
 import mysql.connector as mysql
 from time import time
@@ -26,7 +26,11 @@ class RepEngine(LummetryObject):
     self.PASS = self.config_data['PASS']
     self.DB = self.config_data['DB']
     self._rep_base = '_get_report_'
-    self.connect()
+    
+    try:
+      self.connect()
+    except:
+      self.P("WARNING! Couldn't connect to the mysql DB!")
     return
   
   def connect(self):

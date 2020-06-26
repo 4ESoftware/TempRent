@@ -1,0 +1,32 @@
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    schemes: [https]
+
+#HWIOAuthBundle routes
+hwi_oauth_security:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix: /login
+    schemes: [https]
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix: /login
+    schemes: [https]
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /login
+    schemes: [https]
+
+facebook_login:
+    path: /login/check-facebook
+    schemes: [https]
+
+google_login:
+    path: /login/check-google
+    schemes: [https]
+
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
+    schemes: [https]

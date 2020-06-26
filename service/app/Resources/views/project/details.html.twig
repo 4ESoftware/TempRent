@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title"><a href="{{ path('project_details', {id: project.id}) }}">{{ project.name }}</a></h5>
+            <h6 class="card-subtitle mb-2 text-muted">posted by: <a
+                        href="{{ path('view_user_profile', {id: project.creator.id}) }}">{{ project.creator.fullName }}</a>
+            </h6>
+            <div style="margin-top: 10px; margin-bottom: 10px;">
+                {% for tag in project.tags %}
+                    <div class="badge {% if tag.keyword in userTags %}badge-success{% else %}badge-info{% endif %}"
+                         style="font-size: 1.1em; padding: 5px 10px;">
+                        {{ tag.keyword.value }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            <div class="pull-left project-stats" style="line-height: 35px;">
+                <span class="badge badge-primary" style="margin-left: 5px;">%Completion: {{ project.stats.completion }}%</span>
+                <span class="badge badge-primary" style="margin-left: 5px;">Total Bidders: {{ project.stats.bidders }}</span>
+                <span class="badge badge-primary" style="margin-left: 5px;">Files Uploaded: {{ project.stats.files }}</span>
+            </div>
+        </div>
+    </div>
+
+<div class="card" style="width: 100%; margin-top: 25px;">
+    <div class="card-body">
+    <div class="table-responsive-md">
+        <table class="table table-borderless table-condensed table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Tag</th>
+                <th scope="col"># Bidders</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for tag in project.tags %}
+                <tr>
+                    <td>
+                        <div class="badge {% if tag.keyword in userTags %}badge-success{% else %}badge-info{% endif %}"
+                             style="font-size: 1.1em; padding: 5px 10px;">
+                            {{ tag.keyword.value }}
+                        </div>
+                    </td>
+                    <td>
+                        {{ tag.bids|length }} Bidders
+                    </td>
+                    <td>
+                        {% if tag.keyword in userTags %}
+                            {% set value = 0 %}
+                            {% for bid in tag.bids %}
+                                {% if bid.supplier == user %} {% set value = bid.id %} {% endif %}
+                            {% endfor %}
+
+                            {% if value == 0 %}
+                                <a href="{{ path('project_add_bid', {project: project.id, tag: tag.id}) }}" class="btn btn-success">Send an offer!</a>
+                            {% else %}
+                                <a href="{{ path('project_view_bid', {project: project.id, tag: tag.id, bid: value}) }}" class="btn btn-primary">View your bid!</a>
+                            {% endif %}
+                        {% else %}
+                            You cannot bid on this tag.
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>
+
+{% endblock %}
