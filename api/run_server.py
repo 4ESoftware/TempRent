@@ -603,7 +603,7 @@ if __name__ == '__main__':
                                 cut_left=False,
                                 verbose=False)
   
-  eng_reporing = None
+  eng_reporting = None
   if bool_reporting:
     from reporting import RepEngine
     eng_reporting = RepEngine(log=log)
