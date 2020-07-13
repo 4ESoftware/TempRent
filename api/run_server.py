@@ -13,7 +13,6 @@ import re
 import os
 
 from chatbot_v2.core import bot_replicas_buckets as bot
-from reporting import RepEngine
 
 JOB = 'JOB'
 INTRO = 'INTRO'
@@ -538,6 +537,8 @@ if __name__ == '__main__':
                       type=str)
   parser.add_argument("-d", "--dct_labels", help="The file name of dct label2idx",
                       type=str)
+  parser.add_argument("-r", "--reporting", help="Bool that specifies if reporting module if loaded",
+                      type=int, default=1)
   
   args = parser.parse_args()
   base_folder = args.base_folder
@@ -548,6 +549,7 @@ if __name__ == '__main__':
   emb_model = args.emb_model
   model_name = args.model_name
   fn_dct_config_labels = args.dct_labels
+  bool_reporting = bool(args.reporting)
   print("Running API with base_folder={} & app_folder={} on {}:{} ..."
         .format(base_folder, app_folder, host, port))
 
@@ -601,7 +603,11 @@ if __name__ == '__main__':
                                 cut_left=False,
                                 verbose=False)
   
-  eng_reporting = RepEngine(log=log)
+  eng_reporing = None
+  if bool_reporting:
+    from reporting import RepEngine
+    eng_reporting = RepEngine(log=log)
+
   eng = Inference(model=model, dct_config_labels=dct_config_labels,
                   eng_reporting=eng_reporting,
                   log=log)
