@@ -55,7 +55,7 @@ class Bid
     /**
      * @var int|null
      *
-     * @ORM\Column(name="price", type="integer")
+     * @ORM\Column(name="price", type="integer", nullable=true)
      */
     private $price = null;
 

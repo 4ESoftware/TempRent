@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use AppBundle\Entity\Bid;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,15 +17,16 @@ class BidType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('price')
+            ->add('price', NumberType::class, [
+                'required' => false,
+            ])
             ->add('note')
             ->add('files', FileType::class, [
                 'label' => 'Relevant files',
                 'multiple' => true,
                 'mapped' => false,
                 'required' => false,
-            ])
-        ;
+            ]);
     }
 
     /**

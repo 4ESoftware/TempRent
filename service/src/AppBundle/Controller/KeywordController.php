@@ -21,7 +21,7 @@ class KeywordController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $keywords = $em->getRepository('AppBundle:Keyword')->findAll();
+        $keywords = $em->getRepository('AppBundle:Keyword')->findBy([], ['value' => 'ASC']);
         /** @var ArrayCollection $userKeywords */
         $userKeywords = $user->getKeywords();
         $render = [];
@@ -56,11 +56,12 @@ class KeywordController extends Controller
         if ($text !== '') {
             $keywords = $em->getRepository('AppBundle:Keyword')->createQueryBuilder('k')
                 ->where('k.value LIKE :text')
+                ->orderBy('k.value', 'ASC')
                 ->setParameter('text', '%' . $text . '%')
                 ->getQuery()
                 ->getResult();
         } else {
-            $keywords = $em->getRepository('AppBundle:Keyword')->findAll();
+            $keywords = $em->getRepository('AppBundle:Keyword')->findBy([], ['value' => 'ASC']);
         }
 
         /** @var ArrayCollection $userKeywords */
