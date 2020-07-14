@@ -578,7 +578,7 @@ if __name__ == '__main__':
         .format(base_folder, app_folder, host, port))
 
   log = Logger(lib_name='CHATBOT', base_folder=base_folder, app_folder=app_folder, max_lines=2000)
-  log.reset_seeds(123, packages=['np', 'rn'])
+  # log.reset_seeds(123, packages=['np', 'rn'])
   
   if emb_model is not None:
     tokens_config = {"<PAD>" : 0, "<UNK>" : 1, "<SOS>" : 2, "<EOS>" : 3}
