@@ -169,6 +169,7 @@ class RepEngine(LummetryObject):
       return "Bids and values"
     
     df = self._load_sql('SELECT COUNT(*) cnt, SUM(price) vals, DATE(created_at) dt FROM bids GROUP BY dt')
+    assert df.shape[0] > 0, "SQL error in table `bids`"
     df = df.sort_values('dt')
     vals = df['vals'].values
     plt.figure(figsize=(13,8))
