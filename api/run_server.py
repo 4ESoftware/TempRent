@@ -182,6 +182,8 @@ class Inference(LummetryObject):
   
   def __init__(self, model, dct_config_labels, eng_reporting=None, thr_valid_user_label=0.1, **kwargs):
     super().__init__(**kwargs)
+    fn_buckets = 'buckets.json'
+    
     self.model = model
     self.eng_reporting = None
     self.set_reporting_module(eng_reporting)
@@ -196,7 +198,9 @@ class Inference(LummetryObject):
     self.hashtags = self._compute_hashtags()
     self.thr_valid_user_label = thr_valid_user_label
     self.bot_buckets = bot.create_buckets(log=self.log,
-                                          fn_buckets='buckets.json')
+                                          fn_buckets=fn_buckets)
+    self.bot_not_understood = bot.create_not_understood_buckets(log=self.log,
+                                                                fn_buckets=fn_buckets)
     self.constraint_labels = self._get_constraint_labels()
     self._check_buckets()
     return
@@ -339,10 +343,23 @@ class Inference(LummetryObject):
     _conv_id = len(self.conversation_history)
     self.conversation_history[_conv_id] = {'bucket_names': ['hello'],
                                            'tip_imobil'  : None,
-                                           'user_labels' : []}
+                                           'user_labels' : [],
+                                           'can_repeat'  : True}
     intro = self._get_replica(bucket='hello', user_labels=[])
     intro = intro.replace(bot.namebot, 'Allan')
     return {INTRO: intro, CONVERSATION_ID: _conv_id}
+  
+  
+  def _set_true_can_repeat(self, conversation_id):
+    self.conversation_history[conversation_id]['can_repeat'] = True
+    return
+  
+  def _can_repeat(self, conversation_id):
+    return self.conversation_history[conversation_id]['can_repeat']
+  
+  def _set_false_can_repeat(self, conversation_id):
+    self.conversation_history[conversation_id]['can_repeat'] = False
+    return
   
   @staticmethod
   def _find_next_bucket(prev_bucket_names, tip_imobil):
@@ -471,13 +488,20 @@ class Inference(LummetryObject):
       crt_tip_imobil = self._get_tip_imobil(conversation_id)
     #endif
     
-    if user_label not in expected_labels:
-      dct_ret[NEXT_UTTERANCE] = 'Te rog reformuleaza raspunsul la ultima intrebare.'
-      dct_ret[USER_LABEL] = ''
-      return dct_ret
+    if self._can_repeat(conversation_id):
+      if user_label not in expected_labels:
+        dct_ret[NEXT_UTTERANCE] = random.choice(self.bot_not_understood[bot.str_not_understood+last_bot_replica_bucket])
+        dct_ret[USER_LABEL] = ''
+        self._set_false_can_repeat(conversation_id)
+        return dct_ret
+      #endif
     #endif
     
-    self._append_to_user_labels(conversation_id, user_label)
+    if user_label in expected_labels:
+      self._append_to_user_labels(conversation_id, user_label)
+  
+    self._set_true_can_repeat(conversation_id)
+    
     crt_user_labels = self._get_user_labels(conversation_id)
     
     if user_label in self.constraint_labels:
