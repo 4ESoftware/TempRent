@@ -171,7 +171,7 @@ class RepEngine(LummetryObject):
     df = self._load_sql('SELECT COUNT(*) cnt, SUM(price) vals, DATE(created_at) dt FROM bids GROUP BY dt')
     assert df.shape[0] > 0, "SQL error in table `bids`"
     df = df.sort_values('dt')
-    vals = df['vals'].values
+    vals = df['vals'].fillna(0).values
     plt.figure(figsize=(13,8))
     ax = sns.barplot(x='dt', y='cnt', data=df)
     plt.title('Bids per day with overall values ({:%Y-%m-%d  %H:%M})'.format(
