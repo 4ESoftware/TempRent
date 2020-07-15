@@ -4,7 +4,7 @@ _This repository is based on the reseach grant nr 22/16.06.2017 within Priority 
 
 # Install
 
->**The following information is presented in Romanian language. The English instructions will soon be added**
+>The following information is presented in Romanian language. The English instructions will soon be added
 
 ## Mediul
 - php 7.2
