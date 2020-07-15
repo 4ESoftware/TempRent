@@ -4,6 +4,8 @@ _this repository is based on the reseach grant nr 22/16.06.2017 within Priority 
 
 # Install
 
+*The following information is presented in Romanian language. The English instructions will soon be added*
+
 ## Mediul
 - php 7.2
 - mysql (sau mariadb)
@@ -126,3 +128,6 @@ Optiunea de configurare `delivery_address` este cea care forteaza sistemul sa tr
 
 Toate variabilele mentionate mai sus in `config.yml` sunt definite in `service/app/config/parameters.yml`
 
+## Export
+
+Pentru exportul datelor se va folosi comanda `python export\export.py` lansata in directorul radacina al TempRent fie din SIEMMT sau din versiune Cloud.
