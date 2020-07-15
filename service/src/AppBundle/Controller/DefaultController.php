@@ -144,6 +144,25 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/user/config/supplier", name="set_supplier_type")
+     */
+    public function setSupplierTypeAction(Request $request, UserInterface $user)
+    {
+        $type = $request->request->get('type', null);
+
+        /** @var User $user */
+        if ($user->getSupplierType() === null) {
+            $em = $this->getDoctrine()->getManager();
+            $user->setSupplierType($type);
+
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return  new JsonResponse(['success' => true]);
+    }
+
+    /**
      * @Route("/privacy", name="view_privacy")
      */
     public function viewPrivacyAction()

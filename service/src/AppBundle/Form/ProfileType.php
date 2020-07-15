@@ -26,6 +26,14 @@ class ProfileType extends AbstractType
             ->add('username', null, array('label' => 'Username', 'translation_domain' => 'FOSUserBundle'))
             ->add('email', EmailType::class, array('label' => 'Email', 'translation_domain' => 'FOSUserBundle'))
             ->add('fullName')
+            ->add('supplierType', ChoiceType::class, [
+                'choices'  => [
+                    'Furnizor servicii' => 1,
+                    'Furnizor echipamente' => 2,
+                    'Companie imobiliare' => 3,
+                    'Site imobiliare' => 4,
+                ],
+            ])
             ->add('current_password', PasswordType::class, array(
                 'label' => 'Current Password',
                 'translation_domain' => 'FOSUserBundle',

@@ -64,6 +64,13 @@ class User extends BaseUser
     private $fullName = null;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="supplier_type", type="integer", length=255, nullable=true)
+     */
+    protected $supplierType = null;
+
+    /**
      * @var Company
      *
      * @ORM\OneToOne(targetEntity="Company", mappedBy="user", cascade={"remove"})
@@ -162,6 +169,18 @@ class User extends BaseUser
     public function setFullName(?string $fullName): self
     {
         $this->fullName = $fullName;
+
+        return $this;
+    }
+
+    public function getSupplierType(): ?int
+    {
+        return $this->supplierType;
+    }
+
+    public function setSupplierType(?int $supplierType): User
+    {
+        $this->supplierType = $supplierType;
 
         return $this;
     }

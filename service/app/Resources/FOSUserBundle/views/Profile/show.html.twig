@@ -99,7 +99,62 @@
 {% endblock %}
 
 {% block fos_user_content %}
+    {% if user.type != null and user.type == 1 and user.supplierType == null %}
+    <div class="modal fade" id="supplierType"
+         data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="supplierTypeLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="supplierTypeLabel">Modal title</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="supplierTypeSelect">You haven't got the chance to tell us what type of supplier you are. Please pick an option below.</label>
+                                <select class="form-control" id="supplierTypeSelect">
+                                    <option value="1">Furnizor servicii</option>
+                                    <option value="2">Furnizor echipamente</option>
+                                    <option value="3">Companie imobiliare</option>
+                                    <option value="4">Site imobiliare</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="submitSupplierTypeChoice" class="btn btn-primary">Save my choice</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="row profile">
         {% include "@FOSUser/Profile/show_content.html.twig" %}
     </div>
 {% endblock fos_user_content %}
+
+{% block javascripts %}
+<script>
+    {% if user.type != null and user.type == 1 and user.supplierType == null %}
+    $('#supplierType').modal('show');
+
+    $('#submitSupplierTypeChoice').on('click', function () {
+        var type = $('#supplierTypeSelect').val();
+
+        $.ajax({
+            url: "{{ path('set_supplier_type') }}",
+            method: "POST",
+            dataType: "json",
+            data: {type: type}
+        }).done(function (jsonData) {
+            if (jsonData.success) {
+                $('#supplierType').modal('hide');
+            }
+        });
+    });
+    {% endif %}
+</script>
+{% endblock %}
