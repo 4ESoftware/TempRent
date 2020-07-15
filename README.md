@@ -131,3 +131,7 @@ Toate variabilele mentionate mai sus in `config.yml` sunt definite in `service/a
 ## Export
 
 Pentru exportul datelor se va folosi comanda `python export\export.py` lansata in directorul radacina al TempRent fie din SIEMMT sau din versiune Cloud.
+
+## SIEMMT
+
+Dispozitivul incorporat SIEMMT nu este continut in acest repository public. Schemele, modelele neurale, instalarea, configurarea si functionarea dispozitivului incorporat SIEMMT sunt proprietate intelectuala exclusiva a 4E Software.
