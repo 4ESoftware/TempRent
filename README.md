@@ -134,4 +134,4 @@ Pentru exportul datelor se va folosi comanda `python export\export.py` lansata i
 
 ## SIEMMT
 
-Dispozitivul incorporat SIEMMT nu este continut in acest repository public. Schemele, modelele neurale, instalarea, configurarea si functionarea dispozitivului incorporat SIEMMT sunt proprietate intelectuala exclusiva a 4E Software.
+Parti ale codului sursa proprii dispozitivul incorporat SIEMMT nu este continut in acest repository public. Schemele, modelele neurale, instalarea, configurarea si functionarea dispozitivului incorporat SIEMMT sunt proprietate intelectuala exclusiva a 4E Software.
