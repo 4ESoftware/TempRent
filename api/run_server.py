@@ -490,10 +490,13 @@ class Inference(LummetryObject):
     
     if self._can_repeat(conversation_id):
       if user_label not in expected_labels:
-        dct_ret[NEXT_UTTERANCE] = random.choice(self.bot_not_understood[bot.str_not_understood+last_bot_replica_bucket])
-        dct_ret[USER_LABEL] = ''
-        self._set_false_can_repeat(conversation_id)
-        return dct_ret
+        key = bot.str_not_understood+last_bot_replica_bucket
+        if self.bot_not_understood[key] is not None:
+          dct_ret[NEXT_UTTERANCE] = random.choice(self.bot_not_understood[key])
+          dct_ret[USER_LABEL] = ''
+          self._set_false_can_repeat(conversation_id)
+          return dct_ret
+        #endif
       #endif
     #endif
     
@@ -544,7 +547,7 @@ def infer(conv, conv_id):
   return dct[NEXT_UTTERANCE]
 
 if __name__ == '__main__':
-  ONLINE = True
+  ONLINE = False
   
   parser = argparse.ArgumentParser()
   parser.add_argument("-H", "--host", help='The host of the server', type=str, default='127.0.0.1')
@@ -637,7 +640,7 @@ if __name__ == '__main__':
                   log=log)
   
   ######## TEST ZONE #########
-  if False:
+  if True:
     conversation = []
     intro, conversation_id = start_conv()
     conversation.append(intro)
