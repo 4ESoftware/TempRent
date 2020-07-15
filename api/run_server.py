@@ -547,7 +547,7 @@ def infer(conv, conv_id):
   return dct[NEXT_UTTERANCE]
 
 if __name__ == '__main__':
-  ONLINE = False
+  ONLINE = True
   
   parser = argparse.ArgumentParser()
   parser.add_argument("-H", "--host", help='The host of the server', type=str, default='127.0.0.1')
@@ -640,7 +640,7 @@ if __name__ == '__main__':
                   log=log)
   
   ######## TEST ZONE #########
-  if True:
+  if False:
     conversation = []
     intro, conversation_id = start_conv()
     conversation.append(intro)
