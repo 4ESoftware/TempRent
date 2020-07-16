@@ -1,0 +1,20 @@
+Bine ai venit! Ma numesc <NAMEBOT>. Cu ce informatii te pot ajuta?
+Am nevoie de ajutor sa gasesc o garsoniera. Ma poti ajuta?
+Sigur ca da. Pe cat timp ai fi interesat sa inchiriezi o garsoniera?
+Hai sa spunem 2 ani.
+In regula. In ce oras?
+M-ar interesa sa fie in Bucuresti.
+In care sector?
+Sector 2.
+Cati bani ai fi dispus sa dai lunar pentru un spatiu?
+Hai sa mergem pe 150 de euro.
+Suprafata utila la ce dimensiune sa fie?
+32mp ar fi perfect.
+Ti-ar fi mai de folos daca este mobilat sau nemobilat?
+Mobilat, te rog.
+Ce ai prefera: Bloc nou sau mai vechi?
+Vreau sa fie construit dupa anii 90.
+La ce etaj?
+De la 4 in sus.
+In regula. Mai adaugam altceva inainte sa cautam variante?
+Nu, multumesc.

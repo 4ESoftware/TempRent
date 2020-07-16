@@ -1,0 +1,26 @@
+Buna ziua! Numele meu este <NAMEBOT>, te pot ajuta cu ceva?
+Buna ziua!
+Cu ce informatii te pot ajuta?
+As vrea sa gasesc o garsoniera ieftina.
+Pe ce durata de timp ai vrea sa stai in chirie?
+As vrea pentru cat mai multi ani.
+Spune-mi, te rog, in ce oras ai vrea?
+Bucuresti, ideal mai la margine.
+In ce sector din Bucuresti?
+Undeva in sec 4.
+Am inteles. Care vrei sa fie suma lunara pentru chirie?
+Putem sa mergem pana la maxim 260 euro.
+Si care ai vrea sa fie suprafata utilizabila?
+undeva pe la 40mp.
+Ai prefera sa fie deja mobilat spatiul sau nemobilat?
+Nu vreau sa aiba mobila.
+Preferi un bloc nou sau mai vechi?
+Nu conteaza. Poate sa fie si vechi.
+La ce etaj ai prefera sa fie?
+Oricare.
+In regula. Vrei sa mai adaugam ceva la specificatii inainte sa gasim variante?
+As vrea sa aiba doua bai.
+O sa ma interesez. Ce altceva?
+Poti sa imi gasesti ceva aproape de un parc.
+Cred ca pot sa gasesc ceva dar trebuie sa ma interesez. Altceva?
+Atata vreau.

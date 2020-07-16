@@ -1,0 +1,22 @@
+Buna ziua! Numele meu este <NAMEBOT> si sunt aici sa te ajut!
+Buna ziua! As vrea sa ma ajuti sa gasesc o garsoniera mare pentru a ma putea muta cu prietena mea.
+An inteles. Pentru ce durata ai fi interesat sa ramai in chirie?
+Aproximativ 4 ani.
+In regula. Te rog sa imi spui in ce oras ai vrea sa gasim variante.
+Eu as vrea in Bucuresti.
+In ce sector din Bucuresti doresti sa inchiriezi garsoniera?
+De preferat in sec 5. 
+Care vrei sa fie bugetul alocat lunar?
+In jur de 180 euro.
+Suprafata utilizabila cat de mare ai vrea sa fie?
+Cam 25 de metrii patrati.
+Aha, ok. Ai prefera sa fie deja mobilat spatiul sau nemobilat?
+Eu vreau mobilat.
+Ai prefera sa fie un bloc nou sau vechi?
+Vreau sa fie un bloc vechi.
+Vrei sa fie la un anume etaj?
+Oricare etaj este ok.
+Am inteles. Mai vrei sa adaugi un criteriu inainte sa cautam variante?
+Daca reusesti sa gasesti si cu parcare inclusa in pret, ar fi perfect.
+O sa ma interesez. Altceva?
+Asta e tot.

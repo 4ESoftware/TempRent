@@ -1,0 +1,32 @@
+Buna ziua, eu sunt <NAMEBOT>. Cu ce te pot ajuta?
+Salut! As vrea sa stiu si eu cu cat as putea sa inchiriez un spatiu de birouri cu dimensiune medie. 
+In regula. Pentru cat timp ai vrea sa inchiriezi spatiul de birouri?
+Ar fi peste 5 ani.
+In ce oras ai vrea sa cautam variante?
+Bucuresti.
+Ai preferinte legate de sector?
+As vrea sa fie in sectorul 4.
+Bun. Mai departe: Cat ai fi dispus sa dai lunar pentru inchirierea spatiului de birouri?
+Intre 300 si 400 de euro.
+Cat sa fie suprafata utilizabila a spatiului?
+Nu trebuie sa fie mai mic 150 mp.
+Cate camere ai prefera sa aiba spatiul de birouri?
+O singura camera mare.
+Pentru acest spatiu doresti sa aiba mobila?
+Da, te rog.
+Cate persoane vor folosi acest spatiu?
+Aproximativ 20.
+De care servicii aveti nevoie?
+Servicii de curatenie. Este cea mai mare necesitate a noastra.
+Serviciul de curatenie ai vrea sa fie saptamanal sau zilnic?
+Zilnic, te rog.
+De care alte servicii mai aveti nevoie?
+Momentan atat.
+Aveti nevoie sa va fie pus la dispozitie echipament electronic?
+Da! Wifi, sa fie bun.
+Am inteles. Alte echipamente?
+Nu.
+Ai preferinte legate de etaj?
+Nu.
+In regula. Ce alte servicii sau specificatii ai vrea sa adaugam?
+Cred ca atat momentan.

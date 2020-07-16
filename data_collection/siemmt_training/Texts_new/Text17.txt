@@ -1,0 +1,22 @@
+Buna ziua! Numele meu este <NAMEBOT>. Cu ce informatii te pot ajuta?
+Buna ziua! Vreau sa ma mut cu chirie. Ma poti ajuta?
+Te pot ajuta dar vreau mai intai sa imi clarifici in ce fel de spatiu ai vrea sa te muti.
+Vreau o garsoniera.
+Am inteles. Ai si o perioada anume de timp in care vrei sa stai in chirie?
+Da, 4 luni. Din Mai pana in Septembrie.
+In regula. In ce oras ai prefera?
+In capitala.
+Preferi intr-un sector anume din Bucuresti?
+Vreau sa fie intre sectoarele 5 si 6.
+In ce buget lunar ne incadram?
+290 euro.
+Suprafata utila a spatiului cat sa fie?
+25 metrii patrati, cred.
+Mobilat sau nemobilat?
+Nu este musai sa fie mobilat. Lasa fara mobila.
+Ai prefera sa fie intr-un bloc nou sau vechi?
+Sa fie cat mai rezistent la cutremure.
+Ai preferinte la etaj?
+Intermediar.
+In ordine. Alte detalii sau preferinte pe care sa le adaugam la lista?
+Nu imi trece nimic prin minte.

@@ -1,0 +1,20 @@
+Buna ziua! Numele meu este <NAMEBOT>. Cu ce informatii te pot ajuta?
+Salut! Caut o garsoniera sa ma mut in chirie. Ce poti sa imi recomanzi?
+In regula. Pentru cat timp ai vrea sa inchiriezi garsoniera?
+Pentru urmatorii ani.
+In care oras ai vrea sa locuiesti?
+Vreau sa imi recomanzi in Bucuresti, te rog.
+Ai o preferinta cand vine vorba de sector?
+Vreau sa fie in sec 4.
+In ce buget lunar vrei sa ne incadram?
+270 euro/luna.
+Care vrei sa fie suprafata utila a garsonierei?
+25mp cred ca este suficient.
+Bun. Garsoniera vrei sa fie mobilata sau nemobilata?
+Mobilat.
+Ai prefera sa fie intr-un bloc nou sau vechi?
+As tinde spre un bloc mai nou.
+Ai preferinte legate de etaj pe care se afla locuinta?
+Nu conteaza.
+Altceva ce ai vrea adaugat?
+Nu, multumesc.

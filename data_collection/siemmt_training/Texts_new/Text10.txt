@@ -1,0 +1,36 @@
+Buna ziua! Ma numesc <NAMEBOT> si sunt aici sa te ajut.
+Buna <NAMEBOT>! Caut un spatiu de birouri in care sa lucrez cu echipa mea. Ce variante imi poti oferi?
+Pentru a te putea ajuta, poti sa imi spui pe ce durata de timp vei vrea sa inchiriezi acest spatiu?
+La modul de o luna sau doua.
+Si in ce oras sau judet ai fi interesat sa gasim acest spatiu?
+In capitala.
+Ai preferinte legate de sector?
+Nu, oriunde e ok.
+Si care ar fi bugetul alocat lunar pentru chirie?
+300 euro ar fi limita costului.
+Iar legat de suprafata utila, la ce dimensiuni ai prefera?
+Pe la 70mp.
+Cate camere sa contina spatiul?
+Doua camere sunt suficiente.
+Cate persoane ar lucra in spatiul de birouri?
+Peste 12 persoane in ture diferite.
+Am inteles. Mergand mai departe, care vrei sa fie serviciile oferite?
+Daca se poate sa mi se ofere un contabil, ar fi super.
+O sa iau asta in considerare. Altceva?
+Si o secretara, daca tot e sa cerem si personal.
+Legat de secretara, preferi sa fie femeie sau barbat?
+Barbat, te rog.
+In regula. Altceva?
+Atat.
+Mai departe: Aparatura electronica pusa la dispozitie?
+Printer, scaner, wifi, tot ce se poate. Vrem all inclusive.
+In regula. Preferi ca spatiul sa fie mobilat sau nemobilat?
+Mobilat, te rog. Vreau sa avem birouri si dulapuri.
+Cladirea sa fie noua sau veche? Ce preferi?
+As vrea sa fie o cladire mai noua.
+Preferinte legate de etaj sau poate fi oricare?
+Oricare etaj, nu conteaza.
+In regula. Ce altceva mai vrei sa adaugam inainte sa iti arat variantele?
+Daca se poate sa avem acces la o bucatarie, ar fi bine.
+O sa ma interesez. Altceva?
+Atat.

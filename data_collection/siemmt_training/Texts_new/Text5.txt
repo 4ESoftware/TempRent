@@ -1,0 +1,22 @@
+Buna ziua! Sunt <NAMEBOT>, cu ce te pot ajuta astazi?
+Hey! M-ar interesa sa gasesc o garsoniera, la un pret accesibil, de inchiriat.
+In regula. Pentru cat timp doresti sa inchiriezi acest spatiu?
+Circa 2  luni. Nu vreau ceva pe termen lung.
+Spune, te rog, in ce oras ai vrea sa gasim o garsoniera?
+Bucuresti.
+Ai prefera un anumit sector din Bucuresti?
+In sectorul 1.
+Care este bugetul alocat lunar pentru chirie?
+320 euro pe luna.
+Cat ai prefera sa fie suprafata utilizabila?
+Pot sa accept si 38mp.
+Ok. Ai prefera sa fie deja mobilat spatiul sau nemobilat?
+Preferabil nemobilat, te rog.
+Blocul sa fie nou sau vechi?
+Prefer sa fie nou.
+Garsoniera vrei sa fie la un anume etaj?
+Prefer la parter sau primele etaje.
+Am inteles. Mai sunt si alte specificatii pe care vrei sa le adaugam?
+Vreau sa fie o zona linistita, fara trafic si zgomot.
+Ma voi interesa de asta. Ce altceva?
+Nimic.
