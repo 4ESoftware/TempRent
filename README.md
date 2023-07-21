@@ -151,6 +151,6 @@ tail -f -n 100 nohup.out
 Parti ale codului sursa proprii dispozitivul incorporat SIEMMT nu este continut in acest repository public. Schemele, modelele neurale, instalarea, configurarea si functionarea dispozitivului incorporat SIEMMT sunt proprietate intelectuala exclusiva a 4E Software.
 Nota:
 
-> SIEMMT a fost portat 100% in motorul neural ALLAN
+> SIEMMT a fost portat 100% in motorul neural ALLAN. Incepand cu 2020-09-01 API-urile SIEMMT au fost modificate si inlocuite cu versiunea avansata ALLAN rezultata din cadrul proiectului TempRent.
 
 
