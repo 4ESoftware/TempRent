@@ -57,7 +57,7 @@ class NonReentrantModelServer:
       _ver = self.model.version
     self.log.P("")
     self.log.P("Serving prediction to client '{}' using tf {} - ipython: {}".format(
-      client_id, tf.__version__, self.log.runs_from_ipython))
+      client_id, tf.__version__, self.log.runs_from_ipython()))
     self.log.P("  Model:   {} ({}) ver:{}".format(hex(id(self.model)), self.model.__class__.__name__, _ver))
     self.log.P("  Graph:   {}".format(self.graph)) #hex(id(self.graph))))
     self.log.P("  Session: {}".format(self.session)) #hex(id(self.session))))
@@ -74,7 +74,7 @@ class NonReentrantModelServer:
         
       __info = "input {}:{} and outputs {}:{}".format(
           type(inputs), l1, type(x_inputs), l2)
-      self.log.iP("Executed fun_input_convert w info: " +__info )
+      self.log.P("Executed fun_input_convert w info: " +__info )
       ########
       
     except:
@@ -99,7 +99,7 @@ class NonReentrantModelServer:
         else:
           y_results = predict_func(x_inputs)
         ########
-        self.log.iP("Executed predict_func w Inputs {} and Outputs {}".format(len(y_results), len(x_inputs)))
+        self.log.P("Executed predict_func w Inputs {} and Outputs {}".format(len(y_results), len(x_inputs)))
         ########
       except:
         _err_type = "{}".format(sys.exc_info()[0])
@@ -111,7 +111,7 @@ class NonReentrantModelServer:
       try:
         results = self.fun_output_convert(y_results)
         ########
-        self.log.iP("Executed fun_output_convert w Inputs {} and Outputs {}".format(len(y_results), len(results)))
+        self.log.P("Executed fun_output_convert w Inputs {} and Outputs {}".format(len(y_results), len(results)))
         ########
       except:
         _err_type = "{}".format(sys.exc_info()[0])
