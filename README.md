@@ -134,6 +134,9 @@ Pentru exportul datelor se va folosi comanda `python3 export/export.py` lansata 
 
 ## Operationalizare
 
+> *ATENTIE*: in VM respectiv `_temprent_deploy` trebuie sa existe modelele/datele preantrenate si sa fie validate
+
+
 ```
 cd ~
 cp -r _temprent_deploy/ webapp/
