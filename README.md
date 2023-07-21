@@ -134,8 +134,10 @@ Pentru exportul datelor se va folosi comanda `python3 export/export.py` lansata 
 
 ## Operationalizare
 
-> *ATENTIE*: in VM respectiv `_temprent_deploy` trebuie sa existe modelele/datele preantrenate si sa fie validate
-
+> **ATENTIE**: in VM respectiv `_temprent_deploy` trebuie sa existe modelele/datele preantrenate si sa fie validate
+>   - 20200622_w2v_ep25_transfered_20200120 
+>   - 20200622_180702_AChT02_004_e058_dev_acc_0.843.h5 
+>   - 20200622_180702_dct_label2idx.json
 
 ```
 cd ~
