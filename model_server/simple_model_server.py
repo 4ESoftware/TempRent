@@ -57,7 +57,7 @@ class NonReentrantModelServer:
       _ver = self.model.version
     self.log.P("")
     self.log.P("Serving prediction to client '{}' using tf {} - ipython: {}".format(
-      client_id, tf.__version__, self.log.is_running_from_ipython))
+      client_id, tf.__version__, self.log.runs_from_ipython))
     self.log.P("  Model:   {} ({}) ver:{}".format(hex(id(self.model)), self.model.__class__.__name__, _ver))
     self.log.P("  Graph:   {}".format(self.graph)) #hex(id(self.graph))))
     self.log.P("  Session: {}".format(self.session)) #hex(id(self.session))))
