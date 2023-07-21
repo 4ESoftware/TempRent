@@ -132,6 +132,22 @@ Toate variabilele mentionate mai sus in `config.yml` sunt definite in `service/a
 
 Pentru exportul datelor se va folosi comanda `python3 export/export.py` lansata in directorul radacina al TempRent fie din SIEMMT sau din versiune Cloud.
 
+## Operationalizare
+
+```
+cd ~
+cp -r _temprent_deploy/ webapp/
+cd webapp
+conda activate py37_tensorflow
+nohup python api/run_server.py -H 0.0.0.0 -P 5001 -b ~/webapp -a _temprent_deploy -s 20 -e 20200622_w2v_ep25_transfered_20200120 -m 20200622_180702_AChT02_004_e058_dev_acc_0.843.h5 -d 20200622_180702_dct_label2idx.json &
+tail -f -n 100 nohup.out
+```
+
 ## SIEMMT
 
 Parti ale codului sursa proprii dispozitivul incorporat SIEMMT nu este continut in acest repository public. Schemele, modelele neurale, instalarea, configurarea si functionarea dispozitivului incorporat SIEMMT sunt proprietate intelectuala exclusiva a 4E Software.
+Nota:
+
+> SIEMMT a fost portat 100% in motorul neural ALLAN
+
+
